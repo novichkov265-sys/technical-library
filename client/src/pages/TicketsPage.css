@@ -1,0 +1,319 @@
+/* ===================================
+   TICKETS PAGE STYLES
+   =================================== */
+
+.tickets-page {
+  animation: fadeIn 0.3s ease forwards;
+}
+
+/* Header */
+.tickets-header {
+  margin-bottom: 24px;
+}
+
+.tickets-title {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-gray-900);
+  margin-bottom: 4px;
+}
+
+.tickets-subtitle {
+  color: var(--color-gray-500);
+  font-size: 0.9375rem;
+}
+
+/* Tabs / Filters */
+.tickets-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 24px;
+  padding: 4px;
+  background: var(--color-gray-100);
+  border-radius: 12px;
+  width: fit-content;
+}
+
+.tickets-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-gray-600);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tickets-tab:hover {
+  color: var(--color-gray-900);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.tickets-tab.active {
+  background: white;
+  color: var(--color-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tickets-tab-count {
+  padding: 2px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 10px;
+  background: var(--color-gray-200);
+  color: var(--color-gray-600);
+}
+
+.tickets-tab.active .tickets-tab-count {
+  background: var(--color-primary-bg);
+  color: var(--color-primary);
+}
+
+/* Tickets List */
+.tickets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Ticket Card */
+.ticket-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  background: white;
+  border: 1px solid var(--color-gray-100);
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ticket-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+  transform: translateY(-2px);
+}
+
+/* Ticket Icon */
+.ticket-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ticket-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.ticket-icon.pending {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.ticket-icon.pending_library {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.ticket-icon.approved {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.ticket-icon.rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.ticket-icon.changes_requested {
+  background: #ffedd5;
+  color: #ea580c;
+}
+
+/* Ticket Content */
+.ticket-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.ticket-content-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ticket-name {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--color-gray-900);
+  margin-bottom: 4px;
+}
+
+.ticket-code {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.8125rem;
+  color: var(--color-gray-500);
+}
+
+/* Ticket Meta */
+.ticket-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.ticket-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8125rem;
+  color: var(--color-gray-500);
+}
+
+.ticket-meta-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--color-gray-400);
+}
+
+/* Ticket Badge */
+.ticket-badge {
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.ticket-badge.pending {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.ticket-badge.pending_library {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.ticket-badge.approved {
+  background: #d1fae5;
+  color: #047857;
+}
+
+.ticket-badge.rejected {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.ticket-badge.changes_requested {
+  background: #ffedd5;
+  color: #c2410c;
+}
+
+/* Ticket ID */
+.ticket-id {
+  font-family: 'SF Mono', Monaco, monospace;
+  font-size: 0.8125rem;
+  color: var(--color-gray-400);
+  margin-top: 4px;
+}
+
+/* Ticket Right Section */
+.ticket-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+/* Empty State */
+.tickets-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  background: white;
+  border-radius: 16px;
+  border: 1px solid var(--color-gray-100);
+  text-align: center;
+}
+
+.tickets-empty-icon {
+  width: 64px;
+  height: 64px;
+  color: var(--color-gray-300);
+  margin-bottom: 16px;
+}
+
+.tickets-empty-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-700);
+  margin-bottom: 8px;
+}
+
+.tickets-empty-text {
+  color: var(--color-gray-500);
+  font-size: 0.9375rem;
+}
+
+/* Loading */
+.tickets-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: var(--color-gray-500);
+}
+
+.tickets-spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--color-gray-200);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .ticket-card {
+    flex-direction: column;
+  }
+  
+  .ticket-right {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .tickets-tabs {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
