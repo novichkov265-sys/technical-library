@@ -169,7 +169,6 @@ const userController = {
   },
 async getAnalytics(req, res) {
   try {
-    // Общая статистика документов
     const docsStats = await pool.query(`
       SELECT 
         COUNT(*) as total,
