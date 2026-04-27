@@ -143,7 +143,6 @@ export default function LibrarianPage() {
   return (
     <Layout>
       <h1 className="librarian-page__title">Управление библиотекой</h1>
-      {/* Табы */}
       <div className="librarian-tabs">
         <button
           onClick={() => setActiveTab('categories')}
@@ -168,7 +167,6 @@ export default function LibrarianPage() {
       {loading && activeTab !== 'reports' && (
         <div className="librarian-loading">Загрузка...</div>
       )}
-      {/* Категории */}
       {!loading && activeTab === 'categories' && (
         <div className="librarian-card">
           <div className="librarian-card__header">
@@ -215,7 +213,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-      {/* Теги */}
       {!loading && activeTab === 'tags' && (
         <div className="librarian-card">
           <div className="librarian-card__header">
@@ -262,7 +259,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-      {/* Отчеты */}
       {activeTab === 'reports' && (
         <div className="librarian-card">
           <h2 className="librarian-reports__title">Формирование отчетов</h2>
@@ -279,7 +275,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-      {/* Модальное окно */}
       {showModal && (
         <div className="librarian-modal-overlay">
           <div className="librarian-modal">

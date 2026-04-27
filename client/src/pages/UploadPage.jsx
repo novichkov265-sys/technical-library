@@ -120,7 +120,6 @@ export default function UploadPage() {
           </div>
         )}
         <form onSubmit={handleSubmit} className="upload-form">
-          {/* Основная информация */}
           <div className="upload-section">
             <h2 className="upload-section-title">Основная информация</h2>
             <div className="upload-grid">
@@ -188,7 +187,6 @@ export default function UploadPage() {
               </div>
             </div>
           </div>
-          {/* Теги */}
           {tags.length > 0 && (
             <div className="upload-section">
               <h2 className="upload-section-title">Теги</h2>
@@ -206,7 +204,6 @@ export default function UploadPage() {
               </div>
             </div>
           )}
-          {/* Файл */}
           <div className="upload-section">
             <h2 className="upload-section-title">Файл документа</h2>
             <div className="upload-field">
@@ -227,7 +224,6 @@ export default function UploadPage() {
               )}
             </div>
           </div>
-          {/* Согласующие */}
           <div className="upload-section">
             <h2 className="upload-section-title">Согласующие руководители</h2>
             <p className="upload-approvers-hint">
@@ -261,7 +257,6 @@ export default function UploadPage() {
               </div>
             )}
           </div>
-          {/* Кнопки */}
           <div className="upload-actions">
             <button type="submit" disabled={loading} className="upload-btn upload-btn-primary">
               {loading ? 'Загрузка...' : 'Отправить на согласование'}

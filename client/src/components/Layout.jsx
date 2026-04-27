@@ -94,7 +94,6 @@ export default function Layout({ children }) {
               </div>
               <span>{settings.app_name || 'Техническая Библиотека'}</span>
             </Link>
-            {/* Navigation */}
             <nav className="layout-nav">
               {menuItems.map((item) => (
                 <Link
@@ -106,7 +105,6 @@ export default function Layout({ children }) {
                 </Link>
               ))}
             </nav>
-            {/* User Section */}
             <div className="layout-user">
               {user?.role !== 'admin' && <NotificationBell />}
               <Link to="/profile" className="layout-user-profile">
@@ -129,7 +127,6 @@ export default function Layout({ children }) {
               </button>
             </div>
           </div>
-          {/* Mobile Navigation */}
           <nav className="layout-mobile-nav">
             {menuItems.map((item) => (
               <Link

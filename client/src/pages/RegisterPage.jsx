@@ -48,7 +48,6 @@ export default function RegisterPage() {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
-        {/* Заголовок */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800">
             Регистрация
@@ -57,16 +56,13 @@ export default function RegisterPage() {
             Создайте аккаунт для доступа к библиотеке
           </p>
         </div>
-        {/* Форма */}
         <div className="card">
           <form onSubmit={handleSubmit}>
-            {/* Сообщение об ошибке */}
             {error && (
               <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
                 {error}
               </div>
             )}
-            {/* ФИО */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 ФИО
@@ -81,7 +77,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-            {/* Email */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
@@ -96,7 +91,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-            {/* Должность */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Должность
@@ -110,7 +104,6 @@ export default function RegisterPage() {
                 placeholder="Инженер-конструктор"
               />
             </div>
-            {/* Пароль */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Пароль
@@ -125,7 +118,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-            {/* Подтверждение пароля */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Подтверждение пароля
@@ -140,7 +132,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-            {/* Кнопка регистрации */}
             <button
               type="submit"
               disabled={loading}
@@ -149,7 +140,6 @@ export default function RegisterPage() {
               {loading ? 'Регистрация...' : 'Зарегистрироваться'}
             </button>
           </form>
-          {/* Ссылка на вход */}
           <div className="mt-4 text-center text-sm text-gray-600">
             Уже есть аккаунт?{' '}
             <Link to="/login" className="text-blue-600 hover:underline">

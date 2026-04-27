@@ -93,7 +93,6 @@ export default function SearchPage() {
     <Layout>
       <div className="search-page">
         <h1 className="search-title">Поиск документов</h1>
-        {/* Search Form */}
         <form onSubmit={handleSearch} className="search-form">
           <div className="search-form-grid">
             <div className="search-field">
@@ -161,11 +160,9 @@ export default function SearchPage() {
             </button>
           </div>
         </form>
-        {/* Error Modal */}
         {error && (
           <ErrorModal message={error} onClose={() => setError('')} />
         )}
-        {/* Results */}
         {loading ? (
           <div className="search-loading">
             <div className="search-loading-spinner"></div>

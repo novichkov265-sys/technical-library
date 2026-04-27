@@ -361,7 +361,6 @@ export default function TicketDetailPage() {
   }
   return (
     <Layout>
-      {/* Error Modal */}
       {error && (
         <div className="td-modal-overlay">
           <div className="td-modal td-modal-sm">
@@ -382,14 +381,12 @@ export default function TicketDetailPage() {
           </div>
         </div>
       )}
-      {/* Hidden file input */}
       <input
         type="file"
         ref={fileInputRef}
         onChange={handleFileSelect}
         className="td-hidden"
       />
-      {/* Header */}
       <div className="td-header-section">
         <button onClick={() => navigate('/tickets')} className="td-back-btn">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -442,9 +439,7 @@ export default function TicketDetailPage() {
           </div>
         </div>
       </div>
-      {/* Main Layout */}
       <div className="td-layout">
-        {/* Sidebar */}
         <div className="td-sidebar">
           <div className="card">
             <h3 className="td-section-title">Информация о документе</h3>
@@ -489,14 +484,12 @@ export default function TicketDetailPage() {
             </div>
           </div>
         </div>
-        {/* Main Content */}
         <div className="td-main">
           {/* Preview */}
           <div className="card">
             <h3 className="td-section-title">Предпросмотр документа</h3>
             {renderPreview()}
           </div>
-          {/* Messages */}
           <div className="card">
             <h3 className="td-section-title">
               Обсуждение 
@@ -557,7 +550,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
       </div>
-      {/* Action Modal */}
       {showActionModal && (
         <div className="td-modal-overlay">
           <div className="td-modal">
@@ -606,7 +598,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
       )}
-      {/* Upload Modal */}
       {showUploadModal && (
         <div className="td-modal-overlay">
           <div className="td-modal">

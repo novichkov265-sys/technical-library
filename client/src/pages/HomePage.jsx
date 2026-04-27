@@ -61,7 +61,6 @@ export default function HomePage() {
   return (
     <Layout>
       <div className="home-page">
-        {/* Welcome Section */}
         <div className="home-welcome">
           <h1 className="home-welcome-title">
             Добро пожаловать, {user?.full_name}!
@@ -70,7 +69,6 @@ export default function HomePage() {
             {settings.app_name || 'Электронная библиотека НТД'} | {roleNames[user?.role]}
           </p>
         </div>
-        {/* Quick Actions */}
         <div className="home-actions">
           <Link to="/search" className="home-action-card">
             <div className="home-action-icon blue">
@@ -130,7 +128,6 @@ export default function HomePage() {
           </div>
         ) : (
           <div className="home-sections">
-            {/* Favorites Section */}
             <div className="home-section">
               <div className="home-section-header">
                 <h2 className="home-section-title">Избранное</h2>
@@ -160,7 +157,6 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-            {/* Tickets or Recent Documents */}
             {(user?.role === 'librarian' || user?.role === 'department_head') && pendingTickets.length > 0 ? (
               <div className="home-section">
                 <div className="home-section-header">

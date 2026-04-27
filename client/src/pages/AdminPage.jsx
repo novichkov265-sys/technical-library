@@ -292,7 +292,6 @@ export default function AdminPage() {
   }, [success]);
   return (
     <Layout>
-      {/* Error Modal */}
       {error && (
         <div className="admin-error-overlay">
           <div className="admin-error-modal">
@@ -313,21 +312,18 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-      {/* Success Toast */}
       {success && (
         <div className="admin-success-toast">
           <span>{success}</span>
           <button onClick={() => setSuccess('')} className="admin-success-close">&times;</button>
         </div>
       )}
-      {/* Loading */}
       {loading && (
         <div className="admin-loading">
           <div className="admin-spinner"></div>
           <p>Загрузка...</p>
         </div>
       )}
-      {/* Пользователи */}
       {activeTab === 'users' && !loading && (
         <div className="card admin-page">
           <div className="admin-section-header">
@@ -402,10 +398,8 @@ export default function AdminPage() {
           )}
         </div>
       )}
-      {/* Настройки */}
       {activeTab === 'settings' && !loading && (
         <div className="admin-settings-container admin-page">
-          {/* Основные настройки */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Основные настройки</h3>
             <div className="admin-settings-list">
@@ -425,7 +419,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-          {/* Настройки файлов */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Настройки файлов</h3>
             <div className="admin-settings-list">
@@ -477,7 +470,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-          {/* Настройки безопасности */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Безопасность</h3>
             <div className="admin-settings-list">
@@ -532,7 +524,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-          {/* Настройки архива */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Архив</h3>
             <div className="admin-settings-list">
@@ -608,7 +599,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-      {/* Резервные копии */}
       {activeTab === 'backups' && !loading && (
         <div className="card admin-page">
           <div className="admin-section-header">
@@ -708,10 +698,8 @@ export default function AdminPage() {
           )}
         </div>
       )}
-      {/* Аналитика */}
       {activeTab === 'analytics' && !loading && (
         <div className="admin-analytics admin-page">
-          {/* Основные метрики */}
           <div className="admin-metrics-grid">
             <div className="admin-metric-card">
               <div className="admin-metric-value blue">{analytics?.totalDocuments || 0}</div>
@@ -731,7 +719,6 @@ export default function AdminPage() {
             </div>
           </div>
           <div className="admin-charts-grid">
-            {/* Документы по типам */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Документы по типам</h3>
               {analytics?.documentsByType && analytics.documentsByType.length > 0 ? (
@@ -758,7 +745,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о документах</div>
               )}
             </div>
-            {/* Документы по статусам */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Документы по статусам</h3>
               {analytics?.documentsByStatus && analytics.documentsByStatus.length > 0 ? (
@@ -795,7 +781,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о статусах</div>
               )}
             </div>
-            {/* Пользователи по ролям */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Пользователи по ролям</h3>
               {analytics?.usersByRole && analytics.usersByRole.length > 0 ? (
@@ -822,7 +807,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о пользователях</div>
               )}
             </div>
-            {/* Документы по категориям */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Документы по категориям</h3>
               {analytics?.documentsByCategory && analytics.documentsByCategory.length > 0 ? (
@@ -850,7 +834,6 @@ export default function AdminPage() {
               )}
             </div>
           </div>
-          {/* Популярные документы */}
           {analytics?.popularDocuments && analytics.popularDocuments.length > 0 && (
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Популярные документы</h3>
@@ -880,7 +863,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-      {/* Журнал действий */}
       {activeTab === 'logs' && !loading && (
         <div className="card admin-page">
           <div className="admin-logs-header">
@@ -956,7 +938,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-      {/* Модалка создания/редактирования пользователя */}
       {showUserModal && (
         <div className="admin-modal-overlay">
           <div className="admin-modal">
@@ -1045,7 +1026,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-      {/* Confirm Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={closeConfirmModal}

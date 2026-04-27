@@ -175,7 +175,6 @@ export default function ProfilePage() {
     <Layout>
       <div className="profile-page">
         <h1 className="profile-page__title">Профиль</h1>
-        {/* Карточка профиля */}
         <div className="profile-card">
           <div className="profile-card__content">
             <div className="profile-avatar">
@@ -234,7 +233,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-        {/* Форма редактирования */}
         <div className="profile-form">
           <div className="profile-form__header">
             <div className="profile-form__header-icon">

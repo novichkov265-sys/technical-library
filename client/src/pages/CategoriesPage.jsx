@@ -148,7 +148,6 @@ export default function CategoriesPage() {
     <Layout>
       <div className="categories-page">
         <h1 className="categories-title">Управление категориями и тегами</h1>
-        {/* Success Message */}
         {success && (
           <div className="categories-success">
             <span>{success}</span>
@@ -159,10 +158,8 @@ export default function CategoriesPage() {
             </button>
           </div>
         )}
-        {/* Error Modal */}
         {error && <ErrorModal message={error} onClose={() => setError('')} />}
         <div className="categories-grid">
-          {/* Categories Section */}
           <div className="categories-section">
             <div className="categories-section-header">
               <h2 className="categories-section-title">Категории</h2>
@@ -207,7 +204,6 @@ export default function CategoriesPage() {
               </div>
             )}
           </div>
-          {/* Tags Section */}
           <div className="categories-section">
             <div className="categories-section-header">
               <h2 className="categories-section-title">Теги</h2>
@@ -234,7 +230,6 @@ export default function CategoriesPage() {
             )}
           </div>
         </div>
-        {/* Category Modal */}
         {showCategoryModal && (
           <div className="categories-modal-overlay" onClick={() => setShowCategoryModal(false)}>
             <div className="categories-modal" onClick={(e) => e.stopPropagation()}>
@@ -277,7 +272,6 @@ export default function CategoriesPage() {
             </div>
           </div>
         )}
-        {/* Tag Modal */}
         {showTagModal && (
           <div className="categories-modal-overlay" onClick={() => setShowTagModal(false)}>
             <div className="categories-modal" onClick={(e) => e.stopPropagation()}>
@@ -312,7 +306,6 @@ export default function CategoriesPage() {
             </div>
           </div>
         )}
-        {/* Confirm Modal */}
         <ConfirmModal
           isOpen={confirmModal.isOpen}
           onClose={closeConfirmModal}

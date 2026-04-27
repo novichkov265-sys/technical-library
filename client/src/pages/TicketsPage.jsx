@@ -105,12 +105,10 @@ export default function TicketsPage() {
   return (
     <Layout>
       <div className="tickets-page">
-        {/* Header */}
         <div className="tickets-header">
           <h1 className="tickets-title">Документы на согласование</h1>
           <p className="tickets-subtitle">Согласуйте или отклоните документы</p>
         </div>
-        {/* Tabs */}
         <div className="tickets-tabs">
           <button
             onClick={() => setFilter('all')}
@@ -148,7 +146,6 @@ export default function TicketsPage() {
             <span className="tickets-tab-count">{counts.changes}</span>
           </button>
         </div>
-        {/* Tickets List */}
         {filteredTickets.length === 0 ? (
           <div className="tickets-empty">
             <svg className="tickets-empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

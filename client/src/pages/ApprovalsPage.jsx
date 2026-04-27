@@ -125,7 +125,6 @@ setPendingDeletion([]);
             {error}
           </div>
         )}
-        {/* Документы на утверждение */}
         {!loading && activeTab === 'approval' && (
           <div className="approvals-card">
             {pendingApproval.length === 0 ? (
@@ -194,7 +193,6 @@ setPendingDeletion([]);
             )}
           </div>
         )}
-        {/* Документы на удаление */}
         {!loading && activeTab === 'deletion' && (
           <div className="approvals-card">
             {pendingDeletion.length === 0 ? (

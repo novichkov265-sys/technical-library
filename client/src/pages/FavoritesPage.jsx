@@ -72,7 +72,6 @@ export default function FavoritesPage() {
   return (
     <Layout>
       <div className="favorites-page">
-        {/* Header */}
         <div className="favorites-header">
           <div className="favorites-header-icon">
             <svg fill="currentColor" viewBox="0 0 24 24">
@@ -84,7 +83,6 @@ export default function FavoritesPage() {
             <p className="favorites-subtitle">Сохраненные документы</p>
           </div>
         </div>
-        {/* Error */}
         {error && (
           <div className="favorites-alert">
             <div className="favorites-alert-content">
@@ -100,7 +98,6 @@ export default function FavoritesPage() {
             </button>
           </div>
         )}
-        {/* Empty State */}
         {favorites.length === 0 ? (
           <div className="favorites-empty">
             <div className="favorites-empty-icon">
@@ -129,7 +126,6 @@ export default function FavoritesPage() {
                   className="favorite-card animate-fade-in-up"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  {/* Card Header */}
                   <div className={`favorite-card-header ${doc.type || 'other'}`}>
                     <div className="favorite-card-type">
                       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +135,6 @@ export default function FavoritesPage() {
                     </div>
                     <span className="favorite-card-version">v{doc.version || 1}</span>
                   </div>
-                  {/* Card Body */}
                   <div className="favorite-card-body">
                     <div className="favorite-card-title-row">
                       <Link to={`/documents/${doc.id}`} className="favorite-card-title">
@@ -159,7 +154,6 @@ export default function FavoritesPage() {
                     {doc.description && (
                       <p className="favorite-card-desc">{doc.description}</p>
                     )}
-                    {/* Footer */}
                     <div className="favorite-card-footer">
                       {doc.category_name ? (
                         <span className="favorite-card-category">
@@ -176,7 +170,6 @@ export default function FavoritesPage() {
                       )}
                     </div>
                   </div>
-                  {/* Hover Action */}
                   <div className="favorite-card-action">
                     <Link to={`/documents/${doc.id}`} className="favorite-card-action-btn">
                       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -191,7 +184,6 @@ export default function FavoritesPage() {
             </div>
           </>
         )}
-        {/* Confirm Modal */}
         <ConfirmModal
           isOpen={confirmModal.isOpen}
           onClose={closeConfirmModal}

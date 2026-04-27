@@ -380,7 +380,6 @@ export default function DocumentPage() {
           </div>
         </div>
       )}
-      {/* Заголовок */}
       <div className="document-header">
         <div className="document-header__top">
           <div>
@@ -422,7 +421,6 @@ export default function DocumentPage() {
           </div>
         </div>
       </div>
-      {/* Табы */}
       <div className="document-tabs">
         {[
           { id: 'preview', label: 'Просмотр' },
@@ -437,7 +435,6 @@ export default function DocumentPage() {
           </button>
         ))}
       </div>
-      {/* Просмотр */}
       {activeTab === 'preview' && (
         <div className="document-content">
           <div className="document-preview">{renderPreview()}</div>
@@ -527,7 +524,6 @@ export default function DocumentPage() {
           </div>
         </div>
       )}
-      {/* Версии */}
       {activeTab === 'versions' && (
         <div className="document-versions">
           {versions.length === 0 ? (
@@ -562,7 +558,6 @@ export default function DocumentPage() {
           )}
         </div>
       )}
-      {/* Модальное окно обновления */}
       {showUpdateModal && (
         <div className="document-modal-overlay">
           <div className="document-modal">

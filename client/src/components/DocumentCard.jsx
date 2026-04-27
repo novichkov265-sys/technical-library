@@ -35,20 +35,16 @@ export default function DocumentCard({ document }) {
     <Link to={`/documents/${document.id}`} className="block">
       <div className="card hover:shadow-lg transition-shadow cursor-pointer">
         <div className="flex justify-between items-start mb-3">
-          {/* Код документа */}
           <span className="text-sm font-mono text-gray-500">
             {document.code}
           </span>
-          {/* Статус */}
           <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[document.status]}`}>
             {statusNames[document.status]}
           </span>
         </div>
-        {/* Название */}
         <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
           {document.title}
         </h3>
-        {/* Информация */}
         <div className="text-sm text-gray-600 space-y-1">
           <div className="flex justify-between">
             <span>Тип:</span>
@@ -69,7 +65,6 @@ export default function DocumentCard({ document }) {
             <span className="font-medium">{formatDate(document.updated_at)}</span>
           </div>
         </div>
-        {/* Теги */}
         {document.tags && document.tags.length > 0 && document.tags[0] && (
           <div className="mt-3 flex flex-wrap gap-1">
             {document.tags.map((tag, index) => (

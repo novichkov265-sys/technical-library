@@ -24,7 +24,6 @@ export default function SearchForm({ onSearch, categories }) {
   return (
     <form onSubmit={handleSubmit} className="card mb-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Поисковый запрос */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Поиск по названию или коду
@@ -37,7 +36,6 @@ export default function SearchForm({ onSearch, categories }) {
             className="input"
           />
         </div>
-        {/* Категория */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Категория
@@ -55,7 +53,6 @@ export default function SearchForm({ onSearch, categories }) {
             ))}
           </select>
         </div>
-        {/* Тип документа */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
             Тип документа
@@ -74,7 +71,6 @@ export default function SearchForm({ onSearch, categories }) {
           </select>
         </div>
       </div>
-      {/* Кнопки */}
       <div className="mt-4 flex space-x-2">
         <button type="submit" className="btn btn-primary">
           Найти
