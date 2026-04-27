@@ -3,18 +3,15 @@ import { Link } from 'react-router-dom';
 import { ticketsApi } from '../services/api';
 import Layout from '../components/Layout';
 import './ApprovalsPage.css';
-
 export default function ApprovalsPage() {
   const [activeTab, setActiveTab] = useState('approval');
   const [pendingApproval, setPendingApproval] = useState([]);
   const [pendingDeletion, setPendingDeletion] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   useEffect(() => {
     loadDocuments();
   }, []);
-
   const loadDocuments = async () => {
     setLoading(true);
     setError('');
@@ -22,16 +19,13 @@ export default function ApprovalsPage() {
       const response = await ticketsApi.getAll();
 const tickets = response.data || [];
 console.log('[v0] Tickets received:', tickets);
-// Фильтруем тикеты по статусу
 setPendingApproval(tickets.filter(t => t.status === 'pending'));
-setPendingDeletion([]); // Удаление пока не реализовано через тикеты
+setPendingDeletion([]);
     } catch (err) {
       setError('Ошибка загрузки тикетов');
     }
     setLoading(false);
   };
-
-  // Утверждение тикета
   const handleApprove = async (id) => {
     const comment = prompt('Комментарий (необязательно):');
     try {
@@ -41,8 +35,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
       alert('Ошибка при утверждении');
     }
   };
-
-  // Отклонение тикета
   const handleReject = async (id) => {
     const comment = prompt('Причина отклонения:');
     if (!comment) {
@@ -56,8 +48,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
       alert('Ошибка при отклонении');
     }
   };
-
-  // Согласование удаления
   const handleApproveDeletion = async (id) => {
     if (!confirm('Подтвердить удаление документа?')) return;
     try {
@@ -67,8 +57,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
       alert('Ошибка при удалении');
     }
   };
-
-  // Отклонение удаления
   const handleRejectDeletion = async (id) => {
     try {
       await ticketsApi.reject(id, 'Удаление отклонено');
@@ -77,7 +65,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
       alert('Ошибка');
     }
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
       day: '2-digit',
@@ -85,7 +72,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
       year: 'numeric',
     });
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -94,14 +80,12 @@ setPendingDeletion([]); // Удаление пока не реализовано
     manual: 'Руководство',
     other: 'Другое',
   };
-
   return (
     <Layout>
       <div className="approvals-page">
         <div className="approvals-header">
           <h1 className="approvals-title">Согласование документов</h1>
         </div>
-
         {/* Табы */}
         <div className="approvals-tabs">
           <button
@@ -125,7 +109,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
             <span className="approvals-tab-count">{pendingDeletion.length}</span>
           </button>
         </div>
-
         {/* Loading */}
         {loading && (
           <div className="approvals-loading">
@@ -133,7 +116,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
             <p>Загрузка документов...</p>
           </div>
         )}
-
         {/* Error */}
         {error && (
           <div className="approvals-error">
@@ -143,7 +125,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
             {error}
           </div>
         )}
-
         {/* Документы на утверждение */}
         {!loading && activeTab === 'approval' && (
           <div className="approvals-card">
@@ -213,7 +194,6 @@ setPendingDeletion([]); // Удаление пока не реализовано
             )}
           </div>
         )}
-
         {/* Документы на удаление */}
         {!loading && activeTab === 'deletion' && (
           <div className="approvals-card">

@@ -1,23 +1,17 @@
-/* LibrarianPage.css */
-
 .librarian-page {
   padding: 0;
 }
-
 .librarian-page__title {
   font-size: 1.5rem;
   font-weight: 700;
   color: #1f2937;
   margin-bottom: 1.5rem;
 }
-
-/* Табы */
 .librarian-tabs {
   display: flex;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
-
 .librarian-tabs__btn {
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
@@ -26,22 +20,17 @@
   border: none;
   cursor: pointer;
 }
-
 .librarian-tabs__btn--active {
   background-color: #2563eb;
   color: white;
 }
-
 .librarian-tabs__btn--inactive {
   background-color: #e5e7eb;
   color: #374151;
 }
-
 .librarian-tabs__btn--inactive:hover {
   background-color: #d1d5db;
 }
-
-/* Ошибка */
 .librarian-error {
   margin-bottom: 1rem;
   padding: 1rem;
@@ -50,35 +39,26 @@
   color: #b91c1c;
   border-radius: 0.375rem;
 }
-
-/* Загрузка */
 .librarian-loading {
   text-align: center;
   padding: 2rem;
 }
-
-/* Карточка контента */
 .librarian-card {
   background: white;
   border-radius: 0.75rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   padding: 1.5rem;
 }
-
 .librarian-card__header {
   margin-bottom: 1rem;
 }
-
-/* Таблица */
 .librarian-table-wrapper {
   overflow-x: auto;
 }
-
 .librarian-table {
   width: 100%;
   border-collapse: collapse;
 }
-
 .librarian-table th {
   text-align: left;
   padding: 0.75rem 1rem;
@@ -86,25 +66,19 @@
   color: #4b5563;
   border-bottom: 1px solid #e5e7eb;
 }
-
 .librarian-table td {
   padding: 0.75rem 1rem;
   border-bottom: 1px solid #e5e7eb;
 }
-
 .librarian-table tr:hover {
   background-color: #f9fafb;
 }
-
 .librarian-table__name {
   font-weight: 500;
 }
-
 .librarian-table__desc {
   color: #4b5563;
 }
-
-/* Тег в таблице */
 .librarian-tag {
   display: inline-block;
   padding: 0.25rem 0.75rem;
@@ -113,13 +87,10 @@
   border-radius: 9999px;
   font-size: 0.875rem;
 }
-
-/* Кнопки действий */
 .librarian-actions {
   display: flex;
   gap: 0.5rem;
 }
-
 .librarian-actions__btn {
   padding: 0.25rem 0.75rem;
   font-size: 0.875rem;
@@ -128,56 +99,44 @@
   cursor: pointer;
   transition: background-color 0.2s;
 }
-
 .librarian-actions__btn--edit {
   background-color: #2563eb;
   color: white;
 }
-
 .librarian-actions__btn--edit:hover {
   background-color: #1d4ed8;
 }
-
 .librarian-actions__btn--delete {
   background-color: #dc2626;
   color: white;
 }
-
 .librarian-actions__btn--delete:hover {
   background-color: #b91c1c;
 }
-
-/* Секция отчётов */
 .librarian-reports__title {
   font-size: 1.125rem;
   font-weight: 600;
   margin-bottom: 1rem;
 }
-
 .librarian-reports__list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-
 .librarian-reports__item {
   padding: 1rem;
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
 }
-
 .librarian-reports__item-title {
   font-weight: 500;
   margin-bottom: 0.5rem;
 }
-
 .librarian-reports__item-desc {
   color: #4b5563;
   font-size: 0.875rem;
   margin-bottom: 0.75rem;
 }
-
-/* Модальное окно */
 .librarian-modal-overlay {
   position: fixed;
   inset: 0;
@@ -187,7 +146,6 @@
   justify-content: center;
   z-index: 50;
 }
-
 .librarian-modal {
   background: white;
   border-radius: 0.5rem;
@@ -195,31 +153,26 @@
   width: 100%;
   max-width: 28rem;
 }
-
 .librarian-modal__title {
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 1rem;
 }
-
 .librarian-modal__form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-
 .librarian-modal__field {
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
 }
-
 .librarian-modal__label {
   font-size: 0.875rem;
   font-weight: 500;
   color: #374151;
 }
-
 .librarian-modal__actions {
   display: flex;
   gap: 1rem;

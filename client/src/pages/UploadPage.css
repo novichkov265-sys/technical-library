@@ -1,21 +1,14 @@
-/* ===================================
-   UPLOAD PAGE STYLES
-   =================================== */
-
 .upload-page {
   max-width: 800px;
   margin: 0 auto;
   animation: fadeIn var(--transition-normal) forwards;
 }
-
 .upload-title {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--color-gray-900);
   margin-bottom: var(--spacing-lg);
 }
-
-/* Success Message */
 .upload-success {
   display: flex;
   align-items: center;
@@ -28,14 +21,11 @@
   margin-bottom: var(--spacing-lg);
   animation: fadeInDown var(--transition-fast) forwards;
 }
-
 .upload-success svg {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
 }
-
-/* Form Card */
 .upload-form {
   background: white;
   border-radius: var(--radius-xl);
@@ -43,11 +33,9 @@
   box-shadow: var(--shadow-sm);
   padding: var(--spacing-xl);
 }
-
 .upload-section {
   margin-bottom: var(--spacing-xl);
 }
-
 .upload-section-title {
   font-size: 1.125rem;
   font-weight: 600;
@@ -56,41 +44,32 @@
   padding-bottom: var(--spacing-sm);
   border-bottom: 1px solid var(--color-gray-100);
 }
-
-/* Form Grid */
 .upload-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--spacing-md);
 }
-
 @media (max-width: 640px) {
   .upload-grid {
     grid-template-columns: 1fr;
   }
 }
-
-/* Form Field */
 .upload-field {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
 }
-
 .upload-field.full {
   grid-column: 1 / -1;
 }
-
 .upload-label {
   font-size: 0.875rem;
   font-weight: 500;
   color: var(--color-gray-700);
 }
-
 .upload-label span {
   color: var(--color-danger);
 }
-
 .upload-input,
 .upload-select,
 .upload-textarea {
@@ -103,13 +82,11 @@
   border-radius: var(--radius-lg);
   transition: all var(--transition-fast);
 }
-
 .upload-input:hover,
 .upload-select:hover,
 .upload-textarea:hover {
   border-color: var(--color-gray-300);
 }
-
 .upload-input:focus,
 .upload-select:focus,
 .upload-textarea:focus {
@@ -118,19 +95,15 @@
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px var(--color-primary-bg);
 }
-
 .upload-textarea {
   resize: vertical;
   min-height: 100px;
 }
-
-/* Tags */
 .upload-tags {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-sm);
 }
-
 .upload-tag {
   padding: var(--spacing-xs) var(--spacing-md);
   font-size: 0.875rem;
@@ -142,17 +115,13 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-
 .upload-tag:hover {
   background: var(--color-gray-200);
 }
-
 .upload-tag.active {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: white;
 }
-
-/* File Input */
 .upload-file-area {
   position: relative;
   border: 2px dashed var(--color-gray-300);
@@ -162,47 +131,39 @@
   transition: all var(--transition-fast);
   cursor: pointer;
 }
-
 .upload-file-area:hover {
   border-color: var(--color-primary);
   background: var(--color-primary-bg);
 }
-
 .upload-file-area.has-file {
   border-color: var(--color-success);
   background: var(--color-success-bg);
 }
-
 .upload-file-input {
   position: absolute;
   inset: 0;
   opacity: 0;
   cursor: pointer;
 }
-
 .upload-file-icon {
   width: 48px;
   height: 48px;
   margin: 0 auto var(--spacing-md);
   color: var(--color-gray-400);
 }
-
 .upload-file-text {
   font-size: 0.9375rem;
   color: var(--color-gray-600);
 }
-
 .upload-file-text span {
   color: var(--color-primary);
   font-weight: 500;
 }
-
 .upload-file-hint {
   font-size: 0.8125rem;
   color: var(--color-gray-400);
   margin-top: var(--spacing-xs);
 }
-
 .upload-file-selected {
   display: flex;
   align-items: center;
@@ -215,26 +176,21 @@
   font-size: 0.875rem;
   color: var(--color-gray-700);
 }
-
 .upload-file-selected svg {
   width: 20px;
   height: 20px;
   color: var(--color-success);
 }
-
-/* Approvers */
 .upload-approvers {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
 }
-
 .upload-approvers-hint {
   font-size: 0.875rem;
   color: var(--color-gray-500);
   margin-bottom: var(--spacing-sm);
 }
-
 .upload-approvers-empty {
   padding: var(--spacing-md);
   background: var(--color-warning-bg);
@@ -243,7 +199,6 @@
   color: var(--color-warning-dark);
   font-size: 0.875rem;
 }
-
 .upload-approver {
   display: flex;
   align-items: center;
@@ -255,37 +210,29 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-
 .upload-approver:hover {
   background: var(--color-gray-100);
 }
-
 .upload-approver.selected {
   background: var(--color-primary-bg);
   border-color: var(--color-primary);
 }
-
 .upload-approver-checkbox {
   width: 20px;
   height: 20px;
   accent-color: var(--color-primary);
 }
-
 .upload-approver-info {
   flex: 1;
 }
-
 .upload-approver-name {
   font-weight: 500;
   color: var(--color-gray-800);
 }
-
 .upload-approver-position {
   font-size: 0.8125rem;
   color: var(--color-gray-500);
 }
-
-/* Actions */
 .upload-actions {
   display: flex;
   gap: var(--spacing-md);
@@ -293,7 +240,6 @@
   padding-top: var(--spacing-xl);
   border-top: 1px solid var(--color-gray-100);
 }
-
 .upload-btn {
   display: inline-flex;
   align-items: center;
@@ -306,36 +252,30 @@
   cursor: pointer;
   transition: all var(--transition-fast);
 }
-
 .upload-btn-primary {
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: white;
   border: none;
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
 }
-
 .upload-btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
 }
-
 .upload-btn-primary:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
-
 .upload-btn-secondary {
   background: white;
   color: var(--color-gray-600);
   border: 1px solid var(--color-gray-300);
 }
-
 .upload-btn-secondary:hover {
   background: var(--color-gray-50);
   border-color: var(--color-gray-400);
 }
-
 .upload-file-info {
   display: flex;
   align-items: center;
@@ -347,7 +287,6 @@
   font-size: 0.875rem;
   color: var(--color-success-dark);
 }
-
 .upload-file-info svg {
   color: var(--color-success);
   flex-shrink: 0;

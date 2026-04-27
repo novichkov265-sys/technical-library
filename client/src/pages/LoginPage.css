@@ -1,7 +1,3 @@
-/* ===================================
-   LOGIN PAGE STYLES
-   =================================== */
-
 .login-page {
   min-height: 100vh;
   display: flex;
@@ -10,27 +6,23 @@
 background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   padding: var(--spacing-lg);
 }
-
 .login-container {
   width: 100%;
   max-width: 420px;
   animation: fadeInUp var(--transition-slow) forwards;
 }
-
 .login-card {
   background: white;
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-xl);
   overflow: hidden;
 }
-
 .login-header {
   padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-lg);
   text-align: center;
   background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
   color: white;
 }
-
 .login-logo {
   width: 64px;
   height: 64px;
@@ -42,38 +34,31 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   justify-content: center;
   backdrop-filter: blur(10px);
 }
-
 .login-logo svg {
   width: 32px;
   height: 32px;
 }
-
 .login-title {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: var(--spacing-xs);
   color: white;
 }
-
 .login-subtitle {
   font-size: 0.875rem;
   opacity: 0.9;
 }
-
 .login-body {
   padding: var(--spacing-xl);
 }
-
 .login-form {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
 }
-
 .login-field {
   position: relative;
 }
-
 .login-field-icon {
   position: absolute;
   left: var(--spacing-md);
@@ -83,11 +68,9 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   pointer-events: none;
   transition: color var(--transition-fast);
 }
-
 .login-field:focus-within .login-field-icon {
   color: var(--color-primary);
 }
-
 .login-input {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) 44px;
@@ -98,22 +81,18 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   border-radius: var(--radius-lg);
   transition: all var(--transition-fast);
 }
-
 .login-input:hover {
   background: var(--color-gray-100);
 }
-
 .login-input:focus {
   outline: none;
   background: white;
   border-color: var(--color-primary);
   box-shadow: 0 0 0 4px var(--color-primary-bg);
 }
-
 .login-input::placeholder {
   color: var(--color-gray-400);
 }
-
 .login-submit {
   width: 100%;
   padding: var(--spacing-md) var(--spacing-lg);
@@ -127,29 +106,24 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   transition: all var(--transition-fast);
   box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
 }
-
 .login-submit:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
 }
-
 .login-submit:active:not(:disabled) {
   transform: translateY(0);
 }
-
 .login-submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
-
 .login-submit-loading {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
 }
-
 .login-error {
   padding: var(--spacing-md);
   background: var(--color-danger-bg);
@@ -162,45 +136,36 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
   gap: var(--spacing-sm);
   animation: fadeIn var(--transition-fast) forwards;
 }
-
 .login-error-icon {
   flex-shrink: 0;
   width: 20px;
   height: 20px;
 }
-
-/* Decorative Elements */
 .login-decoration {
   position: absolute;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.1);
   pointer-events: none;
 }
-
 .login-decoration-1 {
   width: 300px;
   height: 300px;
   top: -100px;
   right: -100px;
 }
-
 .login-decoration-2 {
   width: 200px;
   height: 200px;
   bottom: -50px;
   left: -50px;
 }
-
-/* Responsive */
 @media (max-width: 480px) {
   .login-page {
     padding: var(--spacing-md);
   }
-  
   .login-header {
     padding: var(--spacing-xl) var(--spacing-lg) var(--spacing-md);
   }
-  
   .login-body {
     padding: var(--spacing-lg);
   }

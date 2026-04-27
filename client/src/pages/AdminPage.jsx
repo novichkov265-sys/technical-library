@@ -5,22 +5,16 @@ import { useSettings } from '../contexts/SettingsContext';
 import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import './AdminPage.css';
-
 export default function AdminPage() {
   const { refreshSettings } = useSettings();
   const location = useLocation();
-  
-  // Синхронизация с URL
   const searchParams = new URLSearchParams(location.search);
   const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'users');
-
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const tab = params.get('tab') || 'users';
     setActiveTab(tab);
   }, [location.search]);
-  
-  // Users
   const [users, setUsers] = useState([]);
   const [userSearch, setUserSearch] = useState('');
   const [showUserModal, setShowUserModal] = useState(false);
@@ -33,24 +27,13 @@ export default function AdminPage() {
     position: '',
     role: 'technical_specialist',
   });
-
-  // Settings
   const [settings, setSettings] = useState([]);
-  
-  // Backups
   const [backups, setBackups] = useState([]);
-  
-  // Analytics
   const [analytics, setAnalytics] = useState(null);
-  
-  // Audit
   const [auditLogs, setAuditLogs] = useState([]);
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
-  // Confirm modal state
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -59,7 +42,6 @@ export default function AdminPage() {
     confirmStyle: 'danger',
     onConfirm: () => {},
   });
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -68,15 +50,12 @@ export default function AdminPage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   useEffect(() => {
     loadData();
   }, [activeTab]);
-
   const loadData = async () => {
     setLoading(true);
     setError('');
-    
     try {
       if (activeTab === 'users') {
         const response = await usersApi.getAll();
@@ -98,11 +77,8 @@ export default function AdminPage() {
       console.error('Ошибка загрузки:', err);
       setError('Ошибка загрузки данных: ' + (err.response?.data?.error || err.message));
     }
-    
     setLoading(false);
   };
-
-  // Фильтрация пользователей
   const filteredUsers = users.filter(user => {
     if (!userSearch.trim()) return true;
     const search = userSearch.toLowerCase();
@@ -112,37 +88,27 @@ export default function AdminPage() {
       user.position?.toLowerCase().includes(search)
     );
   });
-
-  // User handlers
   const handleUserSubmit = async (e) => {
     e.preventDefault();
     setModalError('');
-    
-    // Валидация пароля
     const minLength = parseInt(getSettingValue('password_min_length', '6'));
-    
     if (!editingUser && userForm.password.length < minLength) {
       setModalError(`Пароль должен быть не менее ${minLength} символов`);
       return;
     }
-    
     if (editingUser && userForm.password && userForm.password.length < minLength) {
       setModalError(`Пароль должен быть не менее ${minLength} символов`);
       return;
     }
-    
-    // Проверка на сложность пароля
     if (userForm.password && userForm.password.length > 0) {
       const hasUpperCase = /[A-ZА-Я]/.test(userForm.password);
       const hasLowerCase = /[a-zа-я]/.test(userForm.password);
       const hasNumbers = /\d/.test(userForm.password);
-      
       if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
         setModalError('Пароль должен содержать заглавные и строчные буквы, а также цифры');
         return;
       }
     }
-    
     try {
       if (editingUser) {
         await usersApi.update(editingUser.id, userForm);
@@ -159,7 +125,6 @@ export default function AdminPage() {
       setModalError(err.response?.data?.error || 'Ошибка сохранения');
     }
   };
-
   const handleEditUser = (user) => {
     setEditingUser(user);
     setUserForm({
@@ -172,7 +137,6 @@ export default function AdminPage() {
     setModalError('');
     setShowUserModal(true);
   };
-
   const handleDeleteUser = async (userId) => {
     try {
       await usersApi.delete(userId);
@@ -182,7 +146,6 @@ export default function AdminPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
-
   const openDeleteUserModal = (userId) => {
     setConfirmModal({
       isOpen: true,
@@ -193,7 +156,6 @@ export default function AdminPage() {
       onConfirm: () => handleDeleteUser(userId),
     });
   };
-
   const resetUserForm = () => {
     setEditingUser(null);
     setUserForm({
@@ -204,8 +166,6 @@ export default function AdminPage() {
       role: 'technical_specialist',
     });
   };
-
-  // Settings handlers
   const handleSettingChange = async (key, value) => {
     try {
       await settingsApi.update(key, value);
@@ -216,14 +176,10 @@ export default function AdminPage() {
       setError('Ошибка сохранения настройки');
     }
   };
-
-  // Получение значения настройки
   const getSettingValue = (key, defaultValue = '') => {
     const setting = settings.find(s => s.key === key);
     return setting?.value || defaultValue;
   };
-
-  // Backup handlers
   const handleCreateBackup = async () => {
     setLoading(true);
     try {
@@ -235,7 +191,6 @@ export default function AdminPage() {
     }
     setLoading(false);
   };
-
   const handleRestoreBackup = async (filename) => {
     setLoading(true);
     try {
@@ -247,7 +202,6 @@ export default function AdminPage() {
     }
     setLoading(false);
   };
-
   const openRestoreBackupModal = (filename) => {
     setConfirmModal({
       isOpen: true,
@@ -258,7 +212,6 @@ export default function AdminPage() {
       onConfirm: () => handleRestoreBackup(filename),
     });
   };
-
   const handleDownloadBackup = async (filename) => {
     try {
       const response = await backupApi.download(filename);
@@ -272,7 +225,6 @@ export default function AdminPage() {
       setError('Ошибка скачивания');
     }
   };
-
   const handleDeleteBackup = async (id) => {
     try {
       await backupApi.delete(id);
@@ -282,7 +234,6 @@ export default function AdminPage() {
       setError('Ошибка удаления');
     }
   };
-
   const openDeleteBackupModal = (id) => {
     setConfirmModal({
       isOpen: true,
@@ -293,15 +244,12 @@ export default function AdminPage() {
       onConfirm: () => handleDeleteBackup(id),
     });
   };
-
   const closeConfirmModal = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('ru-RU');
   };
-
   const formatFileSize = (bytes) => {
     if (!bytes) return '0 Б';
     const k = 1024;
@@ -309,14 +257,12 @@ export default function AdminPage() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-
   const roleNames = {
     admin: 'Администратор',
     librarian: 'Библиотекарь',
     department_head: 'Руководитель отдела',
     technical_specialist: 'Технический специалист',
   };
-
   const actionNames = {
     user_login: 'Вход в систему',
     user_logout: 'Выход из системы',
@@ -338,15 +284,12 @@ export default function AdminPage() {
     backup_restore: 'Восстановление из копии',
     backup_delete: 'Удаление резервной копии',
   };
-
-  // Автоскрытие уведомлений
   useEffect(() => {
     if (success) {
       const timer = setTimeout(() => setSuccess(''), 3000);
       return () => clearTimeout(timer);
     }
   }, [success]);
-
   return (
     <Layout>
       {/* Error Modal */}
@@ -370,7 +313,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-
       {/* Success Toast */}
       {success && (
         <div className="admin-success-toast">
@@ -378,7 +320,6 @@ export default function AdminPage() {
           <button onClick={() => setSuccess('')} className="admin-success-close">&times;</button>
         </div>
       )}
-
       {/* Loading */}
       {loading && (
         <div className="admin-loading">
@@ -386,7 +327,6 @@ export default function AdminPage() {
           <p>Загрузка...</p>
         </div>
       )}
-
       {/* Пользователи */}
       {activeTab === 'users' && !loading && (
         <div className="card admin-page">
@@ -403,7 +343,6 @@ export default function AdminPage() {
                 className="input"
               />
             </div>
-            
             <button
               onClick={() => {
                 resetUserForm();
@@ -415,7 +354,6 @@ export default function AdminPage() {
               Добавить пользователя
             </button>
           </div>
-          
           <div className="admin-table-wrapper">
             <table className="admin-table">
               <thead>
@@ -457,7 +395,6 @@ export default function AdminPage() {
               </tbody>
             </table>
           </div>
-          
           {userSearch && (
             <p className="admin-results-count">
               Найдено: {filteredUsers.length} из {users.length}
@@ -465,7 +402,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-
       {/* Настройки */}
       {activeTab === 'settings' && !loading && (
         <div className="admin-settings-container admin-page">
@@ -489,7 +425,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-
           {/* Настройки файлов */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Настройки файлов</h3>
@@ -512,7 +447,6 @@ export default function AdminPage() {
                   <span>МБ</span>
                 </div>
               </div>
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Разрешенные расширения файлов</label>
                 <input
@@ -527,7 +461,6 @@ export default function AdminPage() {
                 />
                 <p className="admin-setting-hint">Введите расширения через запятую без пробелов</p>
               </div>
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Предпросмотр документов</label>
                 <label className="admin-checkbox-wrapper">
@@ -544,7 +477,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-
           {/* Настройки безопасности */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Безопасность</h3>
@@ -567,7 +499,6 @@ export default function AdminPage() {
                 </div>
                 <p className="admin-setting-hint">Через сколько минут неактивности выходить из системы</p>
               </div>
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Максимум неудачных попыток входа</label>
                 <input
@@ -584,7 +515,6 @@ export default function AdminPage() {
                 />
                 <p className="admin-setting-hint">После превышения аккаунт будет временно заблокирован</p>
               </div>
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Минимальная длина пароля</label>
                 <input
@@ -602,7 +532,6 @@ export default function AdminPage() {
               </div>
             </div>
           </div>
-
           {/* Настройки архива */}
           <div className="admin-settings-card">
             <h3 className="admin-settings-title">Архив</h3>
@@ -625,7 +554,6 @@ export default function AdminPage() {
                 </div>
                 <p className="admin-setting-hint">0 - хранить бессрочно. После истечения срока документы удаляются автоматически.</p>
               </div>
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Хранить версии документов</label>
                 <label className="admin-checkbox-wrapper">
@@ -640,7 +568,6 @@ export default function AdminPage() {
                   </span>
                 </label>
               </div>
-              
               {getSettingValue('keep_versions', 'true') === 'true' && (
                 <div className="admin-setting-item">
                   <label className="admin-setting-label">Максимум версий на документ</label>
@@ -659,7 +586,6 @@ export default function AdminPage() {
                   <p className="admin-setting-hint">Старые версии будут удаляться автоматически</p>
                 </div>
               )}
-              
               <div className="admin-setting-item">
                 <label className="admin-setting-label">Автоудаление закрытых тикетов</label>
                 <div className="admin-setting-row">
@@ -682,7 +608,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-
       {/* Резервные копии */}
       {activeTab === 'backups' && !loading && (
         <div className="card admin-page">
@@ -692,16 +617,14 @@ export default function AdminPage() {
               Создать копию
             </button>
           </div>
-          
           {backups.length === 0 ? (
             <div className="admin-empty">Резервных копий нет</div>
           ) : (
             <div className="admin-backup-list">
-                            {backups.map((backup) => {
+              {backups.map((backup) => {
                 const summary = backup.summary 
                   ? (typeof backup.summary === 'string' ? JSON.parse(backup.summary) : backup.summary)
                   : null;
-                
                 return (
                   <div key={backup.id} className="admin-backup-item">
                     <div className="admin-backup-info">
@@ -785,7 +708,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-
       {/* Аналитика */}
       {activeTab === 'analytics' && !loading && (
         <div className="admin-analytics admin-page">
@@ -808,7 +730,6 @@ export default function AdminPage() {
               <div className="admin-metric-label">Просмотров</div>
             </div>
           </div>
-
           <div className="admin-charts-grid">
             {/* Документы по типам */}
             <div className="admin-chart-card">
@@ -837,7 +758,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о документах</div>
               )}
             </div>
-
             {/* Документы по статусам */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Документы по статусам</h3>
@@ -875,7 +795,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о статусах</div>
               )}
             </div>
-
             {/* Пользователи по ролям */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Пользователи по ролям</h3>
@@ -903,7 +822,6 @@ export default function AdminPage() {
                 <div className="admin-empty">Нет данных о пользователях</div>
               )}
             </div>
-
             {/* Документы по категориям */}
             <div className="admin-chart-card">
               <h3 className="admin-chart-title">Документы по категориям</h3>
@@ -932,7 +850,6 @@ export default function AdminPage() {
               )}
             </div>
           </div>
-
           {/* Популярные документы */}
           {analytics?.popularDocuments && analytics.popularDocuments.length > 0 && (
             <div className="admin-chart-card">
@@ -963,7 +880,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-
       {/* Журнал действий */}
       {activeTab === 'logs' && !loading && (
         <div className="card admin-page">
@@ -971,13 +887,11 @@ export default function AdminPage() {
             <h3 className="admin-logs-title">Журнал действий</h3>
             <span className="admin-logs-count">Всего записей: {auditLogs.length}</span>
           </div>
-          
           {auditLogs.length === 0 ? (
             <div className="admin-empty">Записей пока нет</div>
           ) : (
             <div>
               {(() => {
-                // Группируем по датам
                 const grouped = auditLogs.reduce((acc, log) => {
                   const date = new Date(log.created_at).toLocaleDateString('ru-RU', {
                     year: 'numeric',
@@ -988,7 +902,6 @@ export default function AdminPage() {
                   acc[date].push(log);
                   return acc;
                 }, {});
-
                 return Object.entries(grouped).map(([date, logs]) => (
                   <div key={date} className="admin-logs-group">
                     <div className="admin-logs-date">{date}</div>
@@ -1043,7 +956,6 @@ export default function AdminPage() {
           )}
         </div>
       )}
-
       {/* Модалка создания/редактирования пользователя */}
       {showUserModal && (
         <div className="admin-modal-overlay">
@@ -1055,7 +967,6 @@ export default function AdminPage() {
               {modalError && (
                 <div className="admin-modal-error">{modalError}</div>
               )}
-              
               <div className="admin-form-group">
                 <label className="admin-form-label">ФИО *</label>
                 <input
@@ -1066,7 +977,6 @@ export default function AdminPage() {
                   required
                 />
               </div>
-              
               <div className="admin-form-group">
                 <label className="admin-form-label">Email *</label>
                 <input
@@ -1077,7 +987,6 @@ export default function AdminPage() {
                   required
                 />
               </div>
-              
               <div className="admin-form-group">
                 <label className="admin-form-label">
                   Пароль {editingUser ? '(оставьте пустым, чтобы не менять)' : '*'}
@@ -1094,7 +1003,6 @@ export default function AdminPage() {
                   Минимум {getSettingValue('password_min_length', '6')} символов, заглавные и строчные буквы, цифры
                 </p>
               </div>
-              
               <div className="admin-form-group">
                 <label className="admin-form-label">Должность</label>
                 <input
@@ -1104,7 +1012,6 @@ export default function AdminPage() {
                   className="input"
                 />
               </div>
-              
               <div className="admin-form-group">
                 <label className="admin-form-label">Роль *</label>
                 <select
@@ -1118,7 +1025,6 @@ export default function AdminPage() {
                   <option value="admin">Администратор</option>
                 </select>
               </div>
-              
               <div className="admin-modal-actions">
                 <button type="submit" className="btn btn-primary">
                   {editingUser ? 'Сохранить' : 'Создать'}
@@ -1139,7 +1045,6 @@ export default function AdminPage() {
           </div>
         </div>
       )}
-
       {/* Confirm Modal */}
       <ConfirmModal
         isOpen={confirmModal.isOpen}

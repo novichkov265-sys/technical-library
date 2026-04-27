@@ -1,5 +1,4 @@
 import './ErrorModal.css';
-
 export default function ErrorModal({ message, onClose }) {
   return (
     <div className="error-modal-overlay" onClick={onClose}>

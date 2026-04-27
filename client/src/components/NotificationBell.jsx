@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 import './NotificationBell.css';
-
 export default function NotificationBell() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -13,13 +12,10 @@ export default function NotificationBell() {
   const dropdownRef = useRef(null);
   const prevUnreadCount = useRef(0);
   const navigate = useNavigate();
-
   const fetchUnreadCount = async () => {
     try {
       const response = await api.get('/notifications/count');
       const newCount = response.data.count;
-      
-      // Анимация колокольчика при новых уведомлениях
       if (newCount > prevUnreadCount.current) {
         setHasNewNotification(true);
         setTimeout(() => setHasNewNotification(false), 500);
@@ -30,7 +26,6 @@ export default function NotificationBell() {
       console.error('Ошибка получения счётчика:', err);
     }
   };
-
   const fetchNotifications = async () => {
     setLoading(true);
     try {
@@ -42,7 +37,6 @@ export default function NotificationBell() {
       setLoading(false);
     }
   };
-
   const markAsRead = async (id) => {
     try {
       await api.put(`/notifications/${id}/read`);
@@ -54,7 +48,6 @@ export default function NotificationBell() {
       console.error('Ошибка:', err);
     }
   };
-
   const markAllAsRead = async () => {
     try {
       await api.put('/notifications/read-all');
@@ -64,10 +57,8 @@ export default function NotificationBell() {
       console.error('Ошибка:', err);
     }
   };
-
   const deleteNotification = async (id) => {
     setRemovingId(id);
-    
     setTimeout(async () => {
       try {
         await api.delete(`/notifications/${id}`);
@@ -82,7 +73,6 @@ export default function NotificationBell() {
       setRemovingId(null);
     }, 300);
   };
-
   const handleNotificationClick = async (notification) => {
     if (!notification.is_read) {
       await markAsRead(notification.id);
@@ -93,7 +83,6 @@ export default function NotificationBell() {
       navigate(link);
     }
   };
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -103,30 +92,25 @@ export default function NotificationBell() {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
-
   useEffect(() => {
     fetchUnreadCount();
     const interval = setInterval(fetchUnreadCount, 30000);
     return () => clearInterval(interval);
   }, []);
-
   useEffect(() => {
     if (isOpen) {
       fetchNotifications();
     }
   }, [isOpen]);
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
     const diff = now - date;
-    
     if (diff < 60000) return 'только что';
     if (diff < 3600000) return `${Math.floor(diff / 60000)} мин назад`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)} ч назад`;
     return date.toLocaleDateString('ru-RU');
   };
-
   const getNotificationIcon = (type) => {
     const icons = {
       document_updated: {
@@ -154,12 +138,10 @@ export default function NotificationBell() {
         svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
       }
     };
-
     const icon = icons[type] || {
       className: 'notification-item__icon--gray',
       svg: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
     };
-
     return (
       <div className={`notification-item__icon ${icon.className}`}>
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -168,7 +150,6 @@ export default function NotificationBell() {
       </div>
     );
   };
-
   const getLink = (notification) => {
     if (notification.entity_type === 'document' && notification.entity_id) {
       return `/documents/${notification.entity_id}`;
@@ -178,7 +159,6 @@ export default function NotificationBell() {
     }
     return null;
   };
-
   return (
     <div className="notification-bell" ref={dropdownRef}>
       <button
@@ -194,7 +174,6 @@ export default function NotificationBell() {
           </span>
         )}
       </button>
-
       {isOpen && (
         <div className="notification-dropdown">
           <div className="notification-dropdown__header">
@@ -210,7 +189,6 @@ export default function NotificationBell() {
               </button>
             )}
           </div>
-
           <div className="notification-dropdown__content">
             {loading ? (
               <div className="notification-dropdown__loading">
@@ -232,7 +210,6 @@ export default function NotificationBell() {
                   className={`notification-item ${!notification.is_read ? 'notification-item--unread' : ''} ${removingId === notification.id ? 'notification-item--removing' : ''}`}
                 >
                   {getNotificationIcon(notification.type)}
-                  
                   <div className="notification-item__content">
                     <p className="notification-item__title">{notification.title}</p>
                     <p className="notification-item__message">{notification.message}</p>
@@ -243,7 +220,6 @@ export default function NotificationBell() {
                       {formatDate(notification.created_at)}
                     </p>
                   </div>
-                  
                   <button
                     onClick={(e) => {
                       e.stopPropagation();

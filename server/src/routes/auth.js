@@ -5,8 +5,6 @@ const path = require('path');
 const fs = require('fs');
 const authController = require('../controllers/authController');
 const authMiddleware = require('../middleware/auth');
-
-// Настройка multer для загрузки аватаров
 const avatarStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     const uploadDir = path.join(__dirname, '../../uploads/avatars');
@@ -20,7 +18,6 @@ const avatarStorage = multer.diskStorage({
     cb(null, 'avatar-' + uniqueSuffix + path.extname(file.originalname));
   }
 });
-
 const avatarUpload = multer({
   storage: avatarStorage,
   limits: { fileSize: 5 * 1024 * 1024 },
@@ -33,13 +30,9 @@ const avatarUpload = multer({
     }
   }
 });
-
-// Маршруты
-
 router.post('/login', authController.login);
 router.get('/profile', authMiddleware, authController.getProfile);
 router.put('/profile', authMiddleware, authController.updateProfile);
 router.post('/avatar', authMiddleware, avatarUpload.single('avatar'), authController.uploadAvatar);
 router.delete('/avatar', authMiddleware, authController.deleteAvatar);
-
 module.exports = router;

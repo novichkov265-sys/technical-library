@@ -1,45 +1,37 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './Header.css';
-
 export default function Header() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-
   const roleNames = {
     admin: 'Администратор',
     librarian: 'Библиотекарь',
     department_head: 'Руководитель отдела',
     technical_specialist: 'Технический специалист',
   };
-
   const hasRole = (roles) => {
     if (typeof roles === 'string') {
       return user?.role === roles;
     }
     return roles.includes(user?.role);
   };
-
   const isAdminTab = (tab) => {
     const params = new URLSearchParams(location.search);
     const currentTab = params.get('tab') || 'users';
     return location.pathname === '/admin' && currentTab === tab;
   };
-
   const isActivePage = (path) => {
     return location.pathname === path;
   };
-
   const getLinkClass = (isActive) => {
     return `header-nav-link ${isActive ? 'active' : ''}`;
   };
-
   return (
     <header className="header">
       <div className="header-container">
@@ -53,7 +45,6 @@ export default function Header() {
           </div>
           <span>Техническая Библиотека</span>
         </Link>
-
         {/* Navigation */}
         <nav className="header-nav">
           {user?.role !== 'admin' && (
@@ -72,7 +63,6 @@ export default function Header() {
               </Link>
             </>
           )}
-
           {hasRole('librarian') && (
             <>
               <Link to="/upload" className={getLinkClass(isActivePage('/upload'))}>
@@ -83,13 +73,11 @@ export default function Header() {
               </Link>
             </>
           )}
-
           {hasRole('department_head') && (
             <Link to="/tickets" className={getLinkClass(isActivePage('/tickets'))}>
               Согласование
             </Link>
           )}
-
           {hasRole('admin') && (
             <>
               <Link to="/admin?tab=users" className={getLinkClass(isAdminTab('users'))}>
@@ -110,7 +98,6 @@ export default function Header() {
             </>
           )}
         </nav>
-
         {/* User Profile */}
         <div className="header-user">
           <Link to="/profile" className="header-user-info">

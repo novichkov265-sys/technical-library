@@ -3,10 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const authMiddleware = require('../middleware/auth');
 const roleMiddleware = require('../middleware/role');
-
 router.use(authMiddleware);
-
-// Получить руководителей для выбора согласующих (для библиотекаря)
 router.get('/approvers', async (req, res) => {
   try {
     const pool = require('../config/database');
@@ -22,16 +19,11 @@ router.get('/approvers', async (req, res) => {
     res.status(500).json({ error: 'Ошибка получения списка' });
   }
 });
-
-// Аудит и аналитика
 router.get('/audit', roleMiddleware(['admin']), userController.getAuditLogs);
 router.get('/analytics', roleMiddleware(['admin']), userController.getAnalytics);
-
-// CRUD - только для админа
 router.get('/', roleMiddleware(['admin']), userController.getAll);
 router.get('/:id', roleMiddleware(['admin']), userController.getById);
 router.post('/', roleMiddleware(['admin']), userController.create);
 router.put('/:id', roleMiddleware(['admin']), userController.update);
 router.delete('/:id', roleMiddleware(['admin']), userController.delete);
-
 module.exports = router;

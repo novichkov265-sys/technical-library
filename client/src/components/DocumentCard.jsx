@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom';
-
 export default function DocumentCard({ document }) {
-  // Типы документов на русском
   const typeNames = {
     drawing: 'Чертёж',
     standard: 'Стандарт',
@@ -10,8 +8,6 @@ export default function DocumentCard({ document }) {
     manual: 'Руководство',
     other: 'Другое',
   };
-
-  // Статусы на русском
   const statusNames = {
     draft: 'Черновик',
     pending_approval: 'На согласовании',
@@ -20,8 +16,6 @@ export default function DocumentCard({ document }) {
     archived: 'В архиве',
     withdrawn: 'Отозван',
   };
-
-  // Цвета статусов
   const statusColors = {
     draft: 'bg-gray-100 text-gray-800',
     pending_approval: 'bg-yellow-100 text-yellow-800',
@@ -30,8 +24,6 @@ export default function DocumentCard({ document }) {
     archived: 'bg-gray-100 text-gray-600',
     withdrawn: 'bg-red-100 text-red-800',
   };
-
-  // Форматирование даты
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
       day: '2-digit',
@@ -39,7 +31,6 @@ export default function DocumentCard({ document }) {
       year: 'numeric',
     });
   };
-
   return (
     <Link to={`/documents/${document.id}`} className="block">
       <div className="card hover:shadow-lg transition-shadow cursor-pointer">
@@ -53,12 +44,10 @@ export default function DocumentCard({ document }) {
             {statusNames[document.status]}
           </span>
         </div>
-
         {/* Название */}
         <h3 className="text-lg font-semibold text-gray-800 mb-2 line-clamp-2">
           {document.title}
         </h3>
-
         {/* Информация */}
         <div className="text-sm text-gray-600 space-y-1">
           <div className="flex justify-between">
@@ -80,7 +69,6 @@ export default function DocumentCard({ document }) {
             <span className="font-medium">{formatDate(document.updated_at)}</span>
           </div>
         </div>
-
         {/* Теги */}
         {document.tags && document.tags.length > 0 && document.tags[0] && (
           <div className="mt-3 flex flex-wrap gap-1">

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     email: '',
@@ -12,34 +11,26 @@ export default function RegisterPage() {
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  
   const { register } = useAuth();
   const navigate = useNavigate();
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
-    // Проверка паролей
     if (formData.password !== formData.confirmPassword) {
       setError('Пароли не совпадают');
       return;
     }
-
     if (formData.password.length < 6) {
       setError('Пароль должен быть не менее 6 символов');
       return;
     }
-
     setLoading(true);
-
     const result = await register({
       email: formData.email,
       password: formData.password,
@@ -47,16 +38,13 @@ export default function RegisterPage() {
       position: formData.position,
       role: 'technical_specialist', // По умолчанию - технический специалист
     });
-    
     if (result.success) {
       navigate('/login');
     } else {
       setError(result.error);
     }
-    
     setLoading(false);
   };
-
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-8">
       <div className="max-w-md w-full">
@@ -69,7 +57,6 @@ export default function RegisterPage() {
             Создайте аккаунт для доступа к библиотеке
           </p>
         </div>
-
         {/* Форма */}
         <div className="card">
           <form onSubmit={handleSubmit}>
@@ -79,7 +66,6 @@ export default function RegisterPage() {
                 {error}
               </div>
             )}
-
             {/* ФИО */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -95,7 +81,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-
             {/* Email */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -111,7 +96,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-
             {/* Должность */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -126,7 +110,6 @@ export default function RegisterPage() {
                 placeholder="Инженер-конструктор"
               />
             </div>
-
             {/* Пароль */}
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -142,7 +125,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-
             {/* Подтверждение пароля */}
             <div className="mb-6">
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -158,7 +140,6 @@ export default function RegisterPage() {
                 required
               />
             </div>
-
             {/* Кнопка регистрации */}
             <button
               type="submit"
@@ -168,7 +149,6 @@ export default function RegisterPage() {
               {loading ? 'Регистрация...' : 'Зарегистрироваться'}
             </button>
           </form>
-
           {/* Ссылка на вход */}
           <div className="mt-4 text-center text-sm text-gray-600">
             Уже есть аккаунт?{' '}

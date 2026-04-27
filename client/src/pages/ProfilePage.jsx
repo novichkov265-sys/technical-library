@@ -4,7 +4,6 @@ import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import './ProfilePage.css';
-
 export default function ProfilePage() {
   const { user } = useAuth();
   const fileInputRef = useRef(null);
@@ -22,12 +21,10 @@ export default function ProfilePage() {
   const [success, setSuccess] = useState('');
   const [showDeleteAvatarModal, setShowDeleteAvatarModal] = useState(false);
   const [settings, setSettings] = useState([]);
-
   useEffect(() => {
     loadProfile();
     loadSettings();
   }, []);
-
   const loadProfile = async () => {
     try {
       const response = await authApi.getProfile();
@@ -41,7 +38,6 @@ export default function ProfilePage() {
       console.error('Ошибка загрузки профиля:', err);
     }
   };
-
   const loadSettings = async () => {
     try {
       const response = await settingsApi.getPublic();
@@ -52,116 +48,91 @@ export default function ProfilePage() {
       console.error('Ошибка загрузки настроек:', err);
     }
   };
-
   const getSettingValue = (key, defaultValue = '') => {
     const setting = settings.find(s => s.key === key);
     return setting ? setting.value : defaultValue;
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
     if (formData.new_password) {
       const minLength = parseInt(getSettingValue('password_min_length', '6'));
-
       if (formData.new_password.length < minLength) {
         setError(`Пароль должен быть не менее ${minLength} символов`);
         return;
       }
-
       const hasUpperCase = /[A-ZА-Я]/.test(formData.new_password);
       const hasLowerCase = /[a-zа-я]/.test(formData.new_password);
       const hasNumbers = /\d/.test(formData.new_password);
-
       if (!hasUpperCase || !hasLowerCase || !hasNumbers) {
         setError('Пароль должен содержать заглавные и строчные буквы, а также цифры');
         return;
       }
-
       if (formData.new_password !== formData.confirm_password) {
         setError('Пароли не совпадают');
         return;
       }
-
       if (!formData.current_password) {
         setError('Введите текущий пароль');
         return;
       }
     }
-
     setLoading(true);
-
     try {
       const updateData = {
         full_name: formData.full_name,
         position: formData.position,
       };
-
       if (formData.new_password) {
         updateData.current_password = formData.current_password;
         updateData.new_password = formData.new_password;
       }
-
       await authApi.updateProfile(updateData);
       setSuccess('Профиль успешно обновлен');
-      
       setFormData((prev) => ({
         ...prev,
         current_password: '',
         new_password: '',
         confirm_password: '',
       }));
-
       loadProfile();
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка обновления профиля');
     }
-
     setLoading(false);
   };
-
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
-
   const handleAvatarChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
     if (file.size > 5 * 1024 * 1024) {
       setError('Размер файла не должен превышать 5 МБ');
       return;
     }
-
     setAvatarLoading(true);
     setError('');
-
     try {
       const formData = new FormData();
       formData.append('avatar', file);
-
       const response = await authApi.uploadAvatar(formData);
       setCurrentUser(response.data);
       setSuccess('Фото профиля обновлено');
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка загрузки фото');
     }
-
     setAvatarLoading(false);
     e.target.value = '';
   };
-
   const handleDeleteAvatar = async () => {
     setAvatarLoading(true);
     setError('');
-
     try {
       const response = await authApi.deleteAvatar();
       setCurrentUser(response.data);
@@ -169,18 +140,15 @@ export default function ProfilePage() {
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка удаления фото');
     }
-
     setAvatarLoading(false);
     setShowDeleteAvatarModal(false);
   };
-
   const roleNames = {
     admin: 'Администратор',
     librarian: 'Библиотекарь',
     department_head: 'Руководитель отдела',
     technical_specialist: 'Технический специалист',
   };
-
   const getInitials = (name) => {
     if (!name) return 'U';
     const parts = name.split(' ');
@@ -189,29 +157,24 @@ export default function ProfilePage() {
     }
     return name.substring(0, 2).toUpperCase();
   };
-
   const getAvatarColorClass = (name) => {
     if (!name) return 'profile-avatar__placeholder--blue';
     const colors = ['blue', 'green', 'yellow', 'red', 'purple', 'pink', 'indigo', 'teal'];
     const index = name.charCodeAt(0) % colors.length;
     return `profile-avatar__placeholder--${colors[index]}`;
   };
-
   const getAvatarUrl = (avatarPath) => {
     if (!avatarPath) return null;
     const apiUrl = getApiUrl();
     const baseUrl = apiUrl.replace('/api', '');
     return `${baseUrl}${avatarPath}`;
   };
-
   const displayUser = currentUser || user;
   const minPasswordLength = getSettingValue('password_min_length', '6');
-
   return (
     <Layout>
       <div className="profile-page">
         <h1 className="profile-page__title">Профиль</h1>
-
         {/* Карточка профиля */}
         <div className="profile-card">
           <div className="profile-card__content">
@@ -223,7 +186,6 @@ export default function ProfilePage() {
                 onChange={handleAvatarChange}
                 className="profile-avatar__input"
               />
-              
               {displayUser?.avatar_url ? (
                 <img
                   src={getAvatarUrl(displayUser.avatar_url)}
@@ -243,7 +205,6 @@ export default function ProfilePage() {
                   )}
                 </div>
               )}
-
               {displayUser?.avatar_url && (
                 <button
                   onClick={() => setShowDeleteAvatarModal(true)}
@@ -255,7 +216,6 @@ export default function ProfilePage() {
                 </button>
               )}
             </div>
-            
             <div className="profile-info">
               <h2 className="profile-info__name">{displayUser?.full_name}</h2>
               <p className="profile-info__email">{displayUser?.email}</p>
@@ -274,7 +234,6 @@ export default function ProfilePage() {
             </div>
           </div>
         </div>
-
         {/* Форма редактирования */}
         <div className="profile-form">
           <div className="profile-form__header">
@@ -285,7 +244,6 @@ export default function ProfilePage() {
             </div>
             <h2 className="profile-form__title">Редактирование профиля</h2>
           </div>
-
           <div className="profile-form__body">
             {error && (
               <div className="profile-alert profile-alert--error">
@@ -295,7 +253,6 @@ export default function ProfilePage() {
                 <span className="profile-alert__text">{error}</span>
               </div>
             )}
-
             {success && (
               <div className="profile-alert profile-alert--success">
                 <svg className="profile-alert__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -304,7 +261,6 @@ export default function ProfilePage() {
                 <span className="profile-alert__text">{success}</span>
               </div>
             )}
-
             <form onSubmit={handleSubmit}>
               <div className="profile-form__fields">
                 <div className="profile-form__group">
@@ -323,7 +279,6 @@ export default function ProfilePage() {
                     placeholder="Введите ваше полное имя"
                   />
                 </div>
-
                 <div className="profile-form__group">
                   <label className="profile-form__label">
                     <svg className="profile-form__label-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -341,13 +296,11 @@ export default function ProfilePage() {
                   />
                 </div>
               </div>
-
               <div className="profile-form__divider">
                 <div className="profile-form__divider-line"></div>
                 <span className="profile-form__divider-text">Безопасность</span>
                 <div className="profile-form__divider-line"></div>
               </div>
-
               <div className="profile-form__section-header">
                 <svg className="profile-form__section-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
@@ -355,7 +308,6 @@ export default function ProfilePage() {
                 <h3 className="profile-form__section-title">Изменение пароля</h3>
               </div>
               <p className="profile-form__section-desc">Оставьте поля пустыми, если не хотите менять пароль</p>
-
               <div className="profile-form__fields">
                 <div className="profile-form__group">
                   <label className="profile-form__label">Текущий пароль</label>
@@ -368,7 +320,6 @@ export default function ProfilePage() {
                     placeholder="Введите текущий пароль"
                   />
                 </div>
-
                 <div className="profile-form__group">
                   <label className="profile-form__label">Новый пароль</label>
                   <input
@@ -387,7 +338,6 @@ export default function ProfilePage() {
                     Минимум {minPasswordLength} символов, заглавные и строчные буквы, цифры
                   </p>
                 </div>
-
                 <div className="profile-form__group">
                   <label className="profile-form__label">Подтверждение пароля</label>
                   <input
@@ -399,7 +349,6 @@ export default function ProfilePage() {
                     placeholder="Повторите новый пароль"
                   />
                 </div>
-
                 <button type="submit" disabled={loading} className="profile-form__submit">
                   {loading ? (
                     <>
@@ -420,7 +369,6 @@ export default function ProfilePage() {
           </div>
         </div>
       </div>
-
       <ConfirmModal
         isOpen={showDeleteAvatarModal}
         onClose={() => setShowDeleteAvatarModal(false)}

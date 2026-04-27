@@ -4,25 +4,21 @@ import { useSettings } from '../contexts/SettingsContext';
 import { getApiUrl } from '../services/api';
 import NotificationBell from './NotificationBell';
 import './Layout.css';
-
 export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const { settings } = useSettings();
   const navigate = useNavigate();
   const location = useLocation();
-
   const handleLogout = () => {
     logout();
     navigate('/login');
   };
-
   const roleNames = {
     admin: 'Администратор',
     librarian: 'Библиотекарь',
     department_head: 'Руководитель отдела',
     technical_specialist: 'Технический специалист',
   };
-
   const getInitials = (name) => {
     if (!name) return 'U';
     const parts = name.split(' ');
@@ -31,7 +27,6 @@ export default function Layout({ children }) {
     }
     return name.substring(0, 2).toUpperCase();
   };
-
   const getAvatarColor = (name) => {
     if (!name) return 'layout-avatar-blue';
     const colors = [
@@ -47,33 +42,27 @@ export default function Layout({ children }) {
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
-
   const getAvatarUrl = (avatarPath) => {
     if (!avatarPath) return null;
     const apiUrl = getApiUrl();
     const baseUrl = apiUrl.replace('/api', '');
     return `${baseUrl}${avatarPath}`;
   };
-
   const getMenuItems = () => {
     const items = [];
-    
     if (user?.role !== 'admin') {
       items.push({ path: '/', label: 'Главная', icon: 'home' });
       items.push({ path: '/search', label: 'Поиск', icon: 'search' });
       items.push({ path: '/favorites', label: 'Избранное', icon: 'heart' });
     }
-
     if (user?.role === 'librarian') {
       items.push({ path: '/upload', label: 'Загрузить', icon: 'upload' });
       items.push({ path: '/tickets', label: 'Согласование', icon: 'clipboard' });
       items.push({ path: '/categories', label: 'Категории', icon: 'folder' });
     }
-
     if (user?.role === 'department_head') {
       items.push({ path: '/tickets', label: 'Согласование', icon: 'clipboard' });
     }
-
     if (user?.role === 'admin') {
       items.push({ path: '/admin?tab=users', label: 'Пользователи', icon: 'users' });
       items.push({ path: '/admin?tab=settings', label: 'Настройки', icon: 'settings' });
@@ -81,19 +70,15 @@ export default function Layout({ children }) {
       items.push({ path: '/admin?tab=analytics', label: 'Аналитика', icon: 'chart' });
       items.push({ path: '/admin?tab=logs', label: 'Журнал', icon: 'list' });
     }
-
     return items;
   };
-
   const isActive = (path) => {
     if (path.includes('?')) {
       return location.pathname + location.search === path;
     }
     return location.pathname === path;
   };
-
   const menuItems = getMenuItems();
-
   return (
     <div className="layout">
       <header className="layout-header">
@@ -109,7 +94,6 @@ export default function Layout({ children }) {
               </div>
               <span>{settings.app_name || 'Техническая Библиотека'}</span>
             </Link>
-
             {/* Navigation */}
             <nav className="layout-nav">
               {menuItems.map((item) => (
@@ -122,11 +106,9 @@ export default function Layout({ children }) {
                 </Link>
               ))}
             </nav>
-
             {/* User Section */}
             <div className="layout-user">
               {user?.role !== 'admin' && <NotificationBell />}
-              
               <Link to="/profile" className="layout-user-profile">
                 <div className="layout-avatar">
                   {user?.avatar_url ? (
@@ -142,13 +124,11 @@ export default function Layout({ children }) {
                   <div className="layout-user-role">{roleNames[user?.role]}</div>
                 </div>
               </Link>
-              
               <button onClick={handleLogout} className="layout-logout">
                 Выйти
               </button>
             </div>
           </div>
-
           {/* Mobile Navigation */}
           <nav className="layout-mobile-nav">
             {menuItems.map((item) => (
@@ -163,7 +143,6 @@ export default function Layout({ children }) {
           </nav>
         </div>
       </header>
-
       <main className="layout-main">{children}</main>
     </div>
   );

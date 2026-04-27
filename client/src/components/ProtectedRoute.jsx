@@ -1,10 +1,7 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-
 export default function ProtectedRoute({ children, roles }) {
-  const { isAuthenticated, loading, hasRole } = useAuth();
-
-  // Пока загружается - показываем индикатор
+const { isAuthenticated, loading, hasRole } = useAuth();
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -12,13 +9,9 @@ export default function ProtectedRoute({ children, roles }) {
       </div>
     );
   }
-
-  // Если не авторизован - перенаправляем на логин
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
-
-  // Если указаны роли и у пользователя нет нужной роли
   if (roles && !hasRole(roles)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -33,6 +26,5 @@ export default function ProtectedRoute({ children, roles }) {
       </div>
     );
   }
-
   return children;
 }

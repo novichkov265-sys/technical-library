@@ -5,7 +5,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { useSettings } from '../contexts/SettingsContext';
 import Layout from '../components/Layout';
 import './HomePage.css';
-
 export default function HomePage() {
   const { user } = useAuth();
   const { settings } = useSettings();
@@ -13,32 +12,25 @@ export default function HomePage() {
   const [favorites, setFavorites] = useState([]);
   const [pendingTickets, setPendingTickets] = useState([]);
   const [loading, setLoading] = useState(true);
-
   if (user?.role === 'admin') {
     return <Navigate to="/admin" />;
   }
-
   useEffect(() => {
     loadData();
   }, [user]);
-
   const loadData = async () => {
     try {
       const promises = [
         documentsApi.search({ status: 'in_library' }),
         documentsApi.getFavorites(),
       ];
-      
       if (user?.role === 'librarian' || user?.role === 'department_head') {
         promises.push(ticketsApi.getAll());
       }
-      
       const results = await Promise.all(promises);
-      
       const docs = results[0].data.documents || results[0].data || [];
       setRecentDocuments(Array.isArray(docs) ? docs.slice(0, 5) : []);
       setFavorites(results[1].data?.slice(0, 5) || []);
-      
       if (results[2]) {
         const openTickets = results[2].data.filter(t => ['open', 'in_progress'].includes(t.status));
         setPendingTickets(openTickets.slice(0, 5));
@@ -48,7 +40,6 @@ export default function HomePage() {
     }
     setLoading(false);
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -57,19 +48,16 @@ export default function HomePage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   const roleNames = {
     admin: 'Администратор',
     librarian: 'Библиотекарь',
     department_head: 'Руководитель отдела',
     technical_specialist: 'Технический специалист',
   };
-
   const statusNames = {
     open: 'Открыт',
     in_progress: 'В работе',
   };
-
   return (
     <Layout>
       <div className="home-page">
@@ -82,7 +70,6 @@ export default function HomePage() {
             {settings.app_name || 'Электронная библиотека НТД'} | {roleNames[user?.role]}
           </p>
         </div>
-
         {/* Quick Actions */}
         <div className="home-actions">
           <Link to="/search" className="home-action-card">
@@ -96,7 +83,6 @@ export default function HomePage() {
               <p className="home-action-desc">Найти нужный документ</p>
             </div>
           </Link>
-
           {user?.role === 'librarian' && (
             <Link to="/upload" className="home-action-card">
               <div className="home-action-icon green">
@@ -110,7 +96,6 @@ export default function HomePage() {
               </div>
             </Link>
           )}
-
           {(user?.role === 'librarian' || user?.role === 'department_head') && (
             <Link to="/tickets" className="home-action-card">
               <div className="home-action-icon yellow">
@@ -126,7 +111,6 @@ export default function HomePage() {
               </div>
             </Link>
           )}
-
           <Link to="/favorites" className="home-action-card">
             <div className="home-action-icon purple">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +123,6 @@ export default function HomePage() {
             </div>
           </Link>
         </div>
-
         {loading ? (
           <div className="home-loading">
             <div className="home-loading-spinner"></div>
@@ -177,7 +160,6 @@ export default function HomePage() {
                 )}
               </div>
             </div>
-
             {/* Tickets or Recent Documents */}
             {(user?.role === 'librarian' || user?.role === 'department_head') && pendingTickets.length > 0 ? (
               <div className="home-section">

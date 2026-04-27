@@ -4,22 +4,18 @@ import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import ErrorModal from '../components/ErrorModal';
 import './CategoriesPage.css';
-
 export default function CategoriesPage() {
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   const [showCategoryModal, setShowCategoryModal] = useState(false);
   const [editingCategory, setEditingCategory] = useState(null);
   const [categoryName, setCategoryName] = useState('');
   const [categoryDescription, setCategoryDescription] = useState('');
-
   const [showTagModal, setShowTagModal] = useState(false);
   const [tagName, setTagName] = useState('');
-
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -27,11 +23,9 @@ export default function CategoriesPage() {
     confirmText: '',
     onConfirm: () => {},
   });
-
   useEffect(() => {
     loadData();
   }, []);
-
   const loadData = async () => {
     setLoading(true);
     try {
@@ -46,16 +40,13 @@ export default function CategoriesPage() {
     }
     setLoading(false);
   };
-
   const handleCategorySubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!categoryName.trim()) {
       setError('Введите название категории');
       return;
     }
-
     try {
       if (editingCategory) {
         await categoriesApi.update(editingCategory.id, {
@@ -77,14 +68,12 @@ export default function CategoriesPage() {
       setError(err.response?.data?.error || 'Ошибка сохранения');
     }
   };
-
   const handleEditCategory = (category) => {
     setEditingCategory(category);
     setCategoryName(category.name);
     setCategoryDescription(category.description || '');
     setShowCategoryModal(true);
   };
-
   const handleDeleteCategory = async (id) => {
     try {
       await categoriesApi.delete(id);
@@ -95,7 +84,6 @@ export default function CategoriesPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
-
   const openDeleteCategoryModal = (id) => {
     setConfirmModal({
       isOpen: true,
@@ -105,22 +93,18 @@ export default function CategoriesPage() {
       onConfirm: () => handleDeleteCategory(id),
     });
   };
-
   const resetCategoryForm = () => {
     setEditingCategory(null);
     setCategoryName('');
     setCategoryDescription('');
   };
-
   const handleTagSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!tagName.trim()) {
       setError('Введите название тега');
       return;
     }
-
     try {
       await categoriesApi.createTag({ name: tagName });
       setSuccess('Тег создан');
@@ -131,7 +115,6 @@ export default function CategoriesPage() {
       setError(err.response?.data?.error || 'Ошибка создания тега');
     }
   };
-
   const handleDeleteTag = async (id) => {
     try {
       await categoriesApi.deleteTag(id);
@@ -142,7 +125,6 @@ export default function CategoriesPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
-
   const openDeleteTagModal = (id) => {
     setConfirmModal({
       isOpen: true,
@@ -152,11 +134,9 @@ export default function CategoriesPage() {
       onConfirm: () => handleDeleteTag(id),
     });
   };
-
   const closeConfirmModal = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
-
   if (loading) {
     return (
       <Layout>
@@ -164,12 +144,10 @@ export default function CategoriesPage() {
       </Layout>
     );
   }
-
   return (
     <Layout>
       <div className="categories-page">
         <h1 className="categories-title">Управление категориями и тегами</h1>
-
         {/* Success Message */}
         {success && (
           <div className="categories-success">
@@ -181,10 +159,8 @@ export default function CategoriesPage() {
             </button>
           </div>
         )}
-
         {/* Error Modal */}
         {error && <ErrorModal message={error} onClose={() => setError('')} />}
-
         <div className="categories-grid">
           {/* Categories Section */}
           <div className="categories-section">
@@ -200,7 +176,6 @@ export default function CategoriesPage() {
                 Добавить
               </button>
             </div>
-
             {categories.length === 0 ? (
               <div className="categories-empty">Нет категорий</div>
             ) : (
@@ -232,7 +207,6 @@ export default function CategoriesPage() {
               </div>
             )}
           </div>
-
           {/* Tags Section */}
           <div className="categories-section">
             <div className="categories-section-header">
@@ -241,7 +215,6 @@ export default function CategoriesPage() {
                 Добавить
               </button>
             </div>
-
             {tags.length === 0 ? (
               <div className="categories-empty">Нет тегов</div>
             ) : (
@@ -261,7 +234,6 @@ export default function CategoriesPage() {
             )}
           </div>
         </div>
-
         {/* Category Modal */}
         {showCategoryModal && (
           <div className="categories-modal-overlay" onClick={() => setShowCategoryModal(false)}>
@@ -269,7 +241,6 @@ export default function CategoriesPage() {
               <h3 className="categories-modal-title">
                 {editingCategory ? 'Редактирование категории' : 'Новая категория'}
               </h3>
-
               <form onSubmit={handleCategorySubmit} className="categories-modal-form">
                 <div className="categories-form-group">
                   <label className="categories-form-label">Название *</label>
@@ -281,7 +252,6 @@ export default function CategoriesPage() {
                     required
                   />
                 </div>
-
                 <div className="categories-form-group">
                   <label className="categories-form-label">Описание</label>
                   <textarea
@@ -291,7 +261,6 @@ export default function CategoriesPage() {
                     rows={3}
                   />
                 </div>
-
                 <div className="categories-modal-actions">
                   <button type="submit" className="categories-modal-btn categories-modal-btn-primary">
                     {editingCategory ? 'Сохранить' : 'Создать'}
@@ -308,13 +277,11 @@ export default function CategoriesPage() {
             </div>
           </div>
         )}
-
         {/* Tag Modal */}
         {showTagModal && (
           <div className="categories-modal-overlay" onClick={() => setShowTagModal(false)}>
             <div className="categories-modal" onClick={(e) => e.stopPropagation()}>
               <h3 className="categories-modal-title">Новый тег</h3>
-
               <form onSubmit={handleTagSubmit} className="categories-modal-form">
                 <div className="categories-form-group">
                   <label className="categories-form-label">Название *</label>
@@ -326,7 +293,6 @@ export default function CategoriesPage() {
                     required
                   />
                 </div>
-
                 <div className="categories-modal-actions">
                   <button type="submit" className="categories-modal-btn categories-modal-btn-primary">
                     Создать
@@ -346,7 +312,6 @@ export default function CategoriesPage() {
             </div>
           </div>
         )}
-
         {/* Confirm Modal */}
         <ConfirmModal
           isOpen={confirmModal.isOpen}

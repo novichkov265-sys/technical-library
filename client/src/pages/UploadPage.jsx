@@ -4,10 +4,8 @@ import { documentsApi, categoriesApi, usersApi } from '../services/api';
 import Layout from '../components/Layout';
 import ErrorModal from '../components/ErrorModal';
 import './UploadPage.css';
-
 export default function UploadPage() {
   const navigate = useNavigate();
-  
   const [formData, setFormData] = useState({
     title: '',
     code: '',
@@ -18,19 +16,15 @@ export default function UploadPage() {
     approver_ids: [],
   });
   const [file, setFile] = useState(null);
-  
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [approvers, setApprovers] = useState([]);
-  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-
   useEffect(() => {
     loadData();
   }, []);
-
   const loadData = async () => {
     try {
       const [categoriesRes, tagsRes, approversRes] = await Promise.all([
@@ -45,53 +39,43 @@ export default function UploadPage() {
       console.error('Ошибка загрузки данных:', err);
     }
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   const handleTagToggle = (tagId) => {
     const newTags = formData.tags.includes(tagId)
       ? formData.tags.filter((id) => id !== tagId)
       : [...formData.tags, tagId];
     setFormData({ ...formData, tags: newTags });
   };
-
   const handleApproverToggle = (approverId) => {
     const newApprovers = formData.approver_ids.includes(approverId)
       ? formData.approver_ids.filter((id) => id !== approverId)
       : [...formData.approver_ids, approverId];
     setFormData({ ...formData, approver_ids: newApprovers });
   };
-
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-
     if (!formData.title || !formData.code || !formData.type) {
       setError('Заполните обязательные поля: Название, Код и Тип');
       return;
     }
-
     if (formData.approver_ids.length === 0) {
       setError('Выберите хотя бы одного руководителя для согласования');
       return;
     }
-
     if (!file) {
       setError('Выберите файл для загрузки');
       return;
     }
-
     setLoading(true);
-
     try {
       const data = new FormData();
       data.append('title', formData.title);
@@ -102,9 +86,7 @@ export default function UploadPage() {
       data.append('tags', JSON.stringify(formData.tags));
       data.append('approver_ids', JSON.stringify(formData.approver_ids));
       data.append('file', file);
-
       await documentsApi.upload(data);
-      
       setSuccess('Документ загружен и отправлен на согласование');
       setLoading(false);
       setTimeout(() => {
@@ -114,10 +96,8 @@ export default function UploadPage() {
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка загрузки документа');
     }
-
     setLoading(false);
   };
-
   const typeOptions = [
     { value: 'drawing', label: 'Чертеж' },
     { value: 'standard', label: 'Стандарт' },
@@ -126,14 +106,11 @@ export default function UploadPage() {
     { value: 'manual', label: 'Руководство' },
     { value: 'other', label: 'Другое' },
   ];
-
   return (
     <Layout>
       <div className="upload-page">
         <h1 className="upload-title">Загрузка нового документа</h1>
-
         {error && <ErrorModal message={error} onClose={() => setError('')} />}
-
         {success && (
           <div className="upload-success">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,12 +119,10 @@ export default function UploadPage() {
             <span>{success}</span>
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="upload-form">
           {/* Основная информация */}
           <div className="upload-section">
             <h2 className="upload-section-title">Основная информация</h2>
-            
             <div className="upload-grid">
               <div className="upload-field">
                 <label className="upload-label">Название документа <span>*</span></label>
@@ -161,7 +136,6 @@ export default function UploadPage() {
                   required
                 />
               </div>
-
               <div className="upload-field">
                 <label className="upload-label">Код документа <span>*</span></label>
                 <input
@@ -174,7 +148,6 @@ export default function UploadPage() {
                   required
                 />
               </div>
-
               <div className="upload-field">
                 <label className="upload-label">Тип документа <span>*</span></label>
                 <select
@@ -189,7 +162,6 @@ export default function UploadPage() {
                   ))}
                 </select>
               </div>
-
               <div className="upload-field">
                 <label className="upload-label">Категория</label>
                 <select
@@ -204,7 +176,6 @@ export default function UploadPage() {
                   ))}
                 </select>
               </div>
-
               <div className="upload-field full">
                 <label className="upload-label">Описание документа</label>
                 <textarea
@@ -217,7 +188,6 @@ export default function UploadPage() {
               </div>
             </div>
           </div>
-
           {/* Теги */}
           {tags.length > 0 && (
             <div className="upload-section">
@@ -236,7 +206,6 @@ export default function UploadPage() {
               </div>
             </div>
           )}
-
           {/* Файл */}
           <div className="upload-section">
             <h2 className="upload-section-title">Файл документа</h2>
@@ -258,14 +227,12 @@ export default function UploadPage() {
               )}
             </div>
           </div>
-
           {/* Согласующие */}
           <div className="upload-section">
             <h2 className="upload-section-title">Согласующие руководители</h2>
             <p className="upload-approvers-hint">
               Выберите руководителей, которые должны согласовать документ
             </p>
-            
             {approvers.length === 0 ? (
               <div className="upload-approvers-empty">
                 Нет доступных руководителей. Обратитесь к администратору.
@@ -294,7 +261,6 @@ export default function UploadPage() {
               </div>
             )}
           </div>
-
           {/* Кнопки */}
           <div className="upload-actions">
             <button type="submit" disabled={loading} className="upload-btn upload-btn-primary">

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import './LoginPage.css';
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -10,12 +9,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       await login(email, password);
       navigate('/');
@@ -25,7 +22,6 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
-
   return (
     <div className="login-page">
       <div className="login-container">
@@ -40,7 +36,6 @@ export default function LoginPage() {
             <h1 className="login-title">Техническая Библиотека</h1>
             <p className="login-subtitle">Войдите в систему для продолжения</p>
           </div>
-
           <div className="login-body">
             <form className="login-form" onSubmit={handleSubmit}>
               {error && (
@@ -53,7 +48,6 @@ export default function LoginPage() {
                   <span>{error}</span>
                 </div>
               )}
-
               <div className="login-field">
                 <span className="login-field-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -71,7 +65,6 @@ export default function LoginPage() {
                   autoComplete="email"
                 />
               </div>
-
               <div className="login-field">
                 <span className="login-field-icon">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -89,7 +82,6 @@ export default function LoginPage() {
                   autoComplete="current-password"
                 />
               </div>
-
               <button type="submit" className="login-submit" disabled={loading}>
                 {loading ? (
                   <span className="login-submit-loading">

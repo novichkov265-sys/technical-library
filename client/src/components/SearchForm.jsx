@@ -1,23 +1,18 @@
 import { useState } from 'react';
-
 export default function SearchForm({ onSearch, categories }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
-
   const handleSubmit = (e) => {
     e.preventDefault();
     onSearch({ query, category, type });
   };
-
   const handleReset = () => {
     setQuery('');
     setCategory('');
     setType('');
     onSearch({});
   };
-
-  // Типы документов
   const documentTypes = [
     { value: 'drawing', label: 'Чертёж' },
     { value: 'standard', label: 'Стандарт' },
@@ -26,7 +21,6 @@ export default function SearchForm({ onSearch, categories }) {
     { value: 'manual', label: 'Руководство' },
     { value: 'other', label: 'Другое' },
   ];
-
   return (
     <form onSubmit={handleSubmit} className="card mb-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -43,7 +37,6 @@ export default function SearchForm({ onSearch, categories }) {
             className="input"
           />
         </div>
-
         {/* Категория */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -62,7 +55,6 @@ export default function SearchForm({ onSearch, categories }) {
             ))}
           </select>
         </div>
-
         {/* Тип документа */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -82,7 +74,6 @@ export default function SearchForm({ onSearch, categories }) {
           </select>
         </div>
       </div>
-
       {/* Кнопки */}
       <div className="mt-4 flex space-x-2">
         <button type="submit" className="btn btn-primary">

@@ -1,5 +1,4 @@
 import './ConfirmModal.css';
-
 export default function ConfirmModal({ 
   isOpen = true,
   title = 'Подтверждение', 
@@ -12,15 +11,9 @@ export default function ConfirmModal({
   type,
   confirmStyle
 }) {
-  // Не показываем если isOpen = false
   if (!isOpen) return null;
-  
-  // Поддержка обоих props: onClose и onCancel
   const handleCancel = onCancel || onClose;
-  
-  // Поддержка обоих props: type и confirmStyle
   const modalType = type || confirmStyle || 'danger';
-
   return (
     <div className="confirm-modal-overlay" onClick={handleCancel}>
       <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>

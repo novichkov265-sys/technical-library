@@ -5,13 +5,11 @@ import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
 import mammoth from 'mammoth';
 import './TicketDetailPage.css';
-
 export default function TicketDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
   const fileInputRef = useRef(null);
-  
   const [ticket, setTicket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -20,25 +18,20 @@ export default function TicketDetailPage() {
   const [actionComment, setActionComment] = useState('');
   const [showActionModal, setShowActionModal] = useState(null);
   const [processing, setProcessing] = useState(false);
-  
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [uploadFile, setUploadFile] = useState(null);
   const [uploadComment, setUploadComment] = useState('');
   const [uploading, setUploading] = useState(false);
-  
   const [docxHtml, setDocxHtml] = useState('');
   const [docxLoading, setDocxLoading] = useState(false);
   const [docxError, setDocxError] = useState('');
-
   useEffect(() => {
     loadTicket();
   }, [id]);
-
   useEffect(() => {
     setDocxHtml('');
     setDocxError('');
   }, [ticket?.document_id]);
-
   const loadTicket = async () => {
     setLoading(true);
     try {
@@ -50,11 +43,9 @@ export default function TicketDetailPage() {
     }
     setLoading(false);
   };
-
   const handleSendMessage = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
-    
     try {
       await ticketsApi.addMessage(id, newMessage);
       setNewMessage('');
@@ -63,7 +54,6 @@ export default function TicketDetailPage() {
       setError('Ошибка отправки сообщения');
     }
   };
-
   const handleAction = async (action) => {
     setProcessing(true);
     try {
@@ -74,7 +64,6 @@ export default function TicketDetailPage() {
       } else if (action === 'request_changes') {
         await ticketsApi.requestChanges(id, actionComment);
       }
-      
       setShowActionModal(null);
       setActionComment('');
       loadTicket();
@@ -83,7 +72,6 @@ export default function TicketDetailPage() {
     }
     setProcessing(false);
   };
-
   const handleDownload = async () => {
     try {
       const response = await documentsApi.download(ticket.document_id);
@@ -97,7 +85,6 @@ export default function TicketDetailPage() {
       setError('Ошибка скачивания');
     }
   };
-
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -105,22 +92,17 @@ export default function TicketDetailPage() {
       setShowUploadModal(true);
     }
   };
-
   const handleUploadNewVersion = async () => {
     if (!uploadFile) return;
-    
     setUploading(true);
     try {
       await ticketsApi.updateDocument(id, uploadFile, uploadComment);
-      
       setShowUploadModal(false);
       setUploadFile(null);
       setUploadComment('');
       setDocxHtml('');
       setDocxError('');
-      
       loadTicket();
-      
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
@@ -129,24 +111,19 @@ export default function TicketDetailPage() {
     }
     setUploading(false);
   };
-
   const loadDocxPreview = async () => {
     if (!ticket?.document_id || docxLoading) return;
-    
     setDocxLoading(true);
     setDocxError('');
-    
     try {
       const token = localStorage.getItem('token');
       const response = await fetch(
         `${getApiUrl()}/api/documents/${ticket.document_id}/preview?token=${encodeURIComponent(token || '')}`,
         { headers: { 'Accept': 'application/octet-stream' } }
       );
-      
       if (!response.ok) {
         throw new Error('Ошибка загрузки файла');
       }
-      
       const arrayBuffer = await response.arrayBuffer();
       const result = await mammoth.convertToHtml({ arrayBuffer });
       setDocxHtml(result.value);
@@ -156,11 +133,9 @@ export default function TicketDetailPage() {
     }
     setDocxLoading(false);
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('ru-RU');
   };
-
   const formatFileSize = (bytes) => {
     if (!bytes) return '-';
     const k = 1024;
@@ -168,7 +143,6 @@ export default function TicketDetailPage() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
-
   const statusNames = {
     pending: 'На рассмотрении',
     pending_library: 'Ожидает библиотекаря',
@@ -176,7 +150,6 @@ export default function TicketDetailPage() {
     rejected: 'Отклонён',
     changes_requested: 'Требует доработки',
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -185,19 +158,15 @@ export default function TicketDetailPage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   const canApprove = (user?.role === 'department_head' || user?.role === 'admin') && 
     ['pending', 'pending_library', 'changes_requested'].includes(ticket?.status);
-
   const canUploadNewVersion = ticket?.created_by === user?.id && 
     ['pending', 'changes_requested'].includes(ticket?.status);
-
   const getFileExtension = () => {
     if (!ticket?.file_path && !ticket?.file_name) return '';
     const fileName = ticket.file_name || ticket.file_path || '';
     return fileName.split('.').pop()?.toLowerCase() || '';
   };
-
   const getMessageTypeLabel = (msgType) => {
     switch (msgType) {
       case 'approve':
@@ -212,7 +181,6 @@ export default function TicketDetailPage() {
         return null;
     }
   };
-
   const getMessageCardClass = (msgType) => {
     switch (msgType) {
       case 'approve': return 'td-message-approved';
@@ -222,7 +190,6 @@ export default function TicketDetailPage() {
       default: return 'td-message-default';
     }
   };
-
   const renderPreview = () => {
     if (!ticket?.document_id) {
       return (
@@ -231,11 +198,9 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-
     const token = localStorage.getItem('token');
     const previewUrl = `${getApiUrl()}/api/documents/${ticket.document_id}/preview?token=${encodeURIComponent(token || '')}`;
     const ext = getFileExtension();
-    
     if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp', 'ico', 'tiff', 'tif', 'avif'].includes(ext)) {
       return (
         <div className="td-preview-image-container">
@@ -247,7 +212,6 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-    
     if (ext === 'pdf') {
       return (
         <iframe
@@ -257,12 +221,10 @@ export default function TicketDetailPage() {
         />
       );
     }
-    
     if (ext === 'docx') {
       if (!docxHtml && !docxLoading && !docxError) {
         loadDocxPreview();
       }
-      
       if (docxLoading) {
         return (
           <div className="td-preview-loading">
@@ -271,7 +233,6 @@ export default function TicketDetailPage() {
           </div>
         );
       }
-      
       if (docxError) {
         return (
           <div className="td-preview-error">
@@ -285,7 +246,6 @@ export default function TicketDetailPage() {
           </div>
         );
       }
-      
       if (docxHtml) {
         return (
           <div className="td-preview-docx">
@@ -297,7 +257,6 @@ export default function TicketDetailPage() {
         );
       }
     }
-    
     if (['mp4', 'webm', 'ogg', 'ogv', 'mov', 'avi', 'mkv', 'm4v'].includes(ext)) {
       return (
         <video controls className="td-preview-video" src={previewUrl}>
@@ -305,7 +264,6 @@ export default function TicketDetailPage() {
         </video>
       );
     }
-    
     if (['mp3', 'wav', 'oga', 'm4a', 'aac', 'flac', 'wma', 'ogg', 'opus'].includes(ext)) {
       return (
         <div className="td-preview-audio">
@@ -320,7 +278,6 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-    
     if (['txt', 'md', 'markdown', 'json', 'xml', 'csv', 'log', 'ini', 'cfg', 'yaml', 'yml', 'toml', 'env', 'js', 'ts', 'jsx', 'tsx', 'html', 'htm', 'css', 'scss', 'py', 'java', 'c', 'cpp', 'h', 'cs', 'go', 'rs', 'rb', 'php', 'sql', 'sh', 'bat'].includes(ext)) {
       return (
         <iframe
@@ -330,7 +287,6 @@ export default function TicketDetailPage() {
         />
       );
     }
-    
     if (['doc', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'ods', 'odp', 'rtf'].includes(ext)) {
       return (
         <div className="td-preview-unsupported">
@@ -345,7 +301,6 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-    
     if (['dwg', 'dxf', 'dwf', 'step', 'stp', 'iges', 'igs', 'stl'].includes(ext)) {
       return (
         <div className="td-preview-unsupported">
@@ -360,7 +315,6 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-    
     if (['zip', 'rar', '7z', 'tar', 'gz', 'bz2'].includes(ext)) {
       return (
         <div className="td-preview-unsupported">
@@ -375,7 +329,6 @@ export default function TicketDetailPage() {
         </div>
       );
     }
-    
     return (
       <div className="td-preview-unsupported">
         <svg className="td-preview-unsupported-icon gray" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -389,7 +342,6 @@ export default function TicketDetailPage() {
       </div>
     );
   };
-
   if (loading) {
     return (
       <Layout>
@@ -400,7 +352,6 @@ export default function TicketDetailPage() {
       </Layout>
     );
   }
-
   if (!ticket) {
     return (
       <Layout>
@@ -408,7 +359,6 @@ export default function TicketDetailPage() {
       </Layout>
     );
   }
-
   return (
     <Layout>
       {/* Error Modal */}
@@ -432,7 +382,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
       )}
-
       {/* Hidden file input */}
       <input
         type="file"
@@ -440,7 +389,6 @@ export default function TicketDetailPage() {
         onChange={handleFileSelect}
         className="td-hidden"
       />
-
       {/* Header */}
       <div className="td-header-section">
         <button onClick={() => navigate('/tickets')} className="td-back-btn">
@@ -449,7 +397,6 @@ export default function TicketDetailPage() {
           </svg>
           Назад к списку
         </button>
-        
         <div className="td-header-row">
           <div className="td-header-info">
             <div className="td-badges">
@@ -461,7 +408,6 @@ export default function TicketDetailPage() {
             <h1 className="td-title">{ticket.document_title}</h1>
             <p className="td-code">{ticket.document_code}</p>
           </div>
-          
           <div className="td-actions">
             {canUploadNewVersion && (
               <button
@@ -471,7 +417,6 @@ export default function TicketDetailPage() {
                 Загрузить новую версию
               </button>
             )}
-            
             {canApprove && (
               <>
                 <button
@@ -497,7 +442,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
       </div>
-
       {/* Main Layout */}
       <div className="td-layout">
         {/* Sidebar */}
@@ -532,14 +476,12 @@ export default function TicketDetailPage() {
                 <dd>{formatDate(ticket.updated_at)}</dd>
               </div>
             </dl>
-            
             {ticket.document_description && (
               <div className="td-description">
                 <dt>Описание</dt>
                 <dd>{ticket.document_description}</dd>
               </div>
             )}
-            
             <div className="td-download-section">
               <button onClick={handleDownload} className="btn btn-primary td-download-btn">
                 Скачать документ
@@ -547,7 +489,6 @@ export default function TicketDetailPage() {
             </div>
           </div>
         </div>
-
         {/* Main Content */}
         <div className="td-main">
           {/* Preview */}
@@ -555,14 +496,12 @@ export default function TicketDetailPage() {
             <h3 className="td-section-title">Предпросмотр документа</h3>
             {renderPreview()}
           </div>
-
           {/* Messages */}
           <div className="card">
             <h3 className="td-section-title">
               Обсуждение 
               <span className="td-message-count">({messages.length})</span>
             </h3>
-            
             <div className="td-messages">
               {messages.length === 0 ? (
                 <p className="td-messages-empty">Сообщений пока нет</p>
@@ -571,7 +510,6 @@ export default function TicketDetailPage() {
                   const msgType = msg.message_type || msg.type || 'message';
                   const typeLabel = getMessageTypeLabel(msgType);
                   const cardClass = getMessageCardClass(msgType);
-                  
                   return (
                     <div key={msg.id} className={`td-message ${cardClass}`}>
                       <div className="td-message-header">
@@ -597,7 +535,6 @@ export default function TicketDetailPage() {
                 })
               )}
             </div>
-            
             {['pending', 'pending_library', 'changes_requested'].includes(ticket.status) && (
               <form onSubmit={handleSendMessage} className="td-message-form">
                 <input
@@ -612,7 +549,6 @@ export default function TicketDetailPage() {
                 </button>
               </form>
             )}
-            
             {['approved', 'rejected', 'resolved', 'closed'].includes(ticket.status) && (
               <div className="td-messages-closed">
                 Тикет закрыт. Новые сообщения недоступны.
@@ -621,7 +557,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
       </div>
-
       {/* Action Modal */}
       {showActionModal && (
         <div className="td-modal-overlay">
@@ -631,7 +566,6 @@ export default function TicketDetailPage() {
               {showActionModal === 'reject' && 'Отклонение документа'}
               {showActionModal === 'request_changes' && 'Запрос на доработку'}
             </h3>
-            
             <div className="td-modal-field">
               <label className="td-modal-label">
                 Комментарий {showActionModal !== 'approve' && <span className="td-required">*</span>}
@@ -651,7 +585,6 @@ export default function TicketDetailPage() {
                 required={showActionModal !== 'approve'}
               />
             </div>
-            
             <div className="td-modal-buttons">
               <button
                 onClick={() => handleAction(showActionModal)}
@@ -673,19 +606,16 @@ export default function TicketDetailPage() {
           </div>
         </div>
       )}
-
       {/* Upload Modal */}
       {showUploadModal && (
         <div className="td-modal-overlay">
           <div className="td-modal">
             <h3 className="td-modal-title">Загрузка новой версии</h3>
-            
             <div className="td-upload-info">
               <p className="td-upload-label">Выбранный файл:</p>
               <p className="td-upload-filename">{uploadFile?.name}</p>
               <p className="td-upload-size">{formatFileSize(uploadFile?.size)}</p>
             </div>
-            
             <div className="td-modal-field">
               <label className="td-modal-label">Комментарий к изменениям</label>
               <textarea
@@ -696,7 +626,6 @@ export default function TicketDetailPage() {
                 placeholder="Опишите внесенные изменения..."
               />
             </div>
-            
             <div className="td-modal-buttons">
               <button
                 onClick={handleUploadNewVersion}

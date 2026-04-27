@@ -4,25 +4,21 @@ import { documentsApi, categoriesApi } from '../services/api';
 import Layout from '../components/Layout';
 import ErrorModal from '../components/ErrorModal';
 import './SearchPage.css';
-
 export default function SearchPage() {
   const [documents, setDocuments] = useState([]);
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-
   const [filters, setFilters] = useState({
     query: '',
     category_id: '',
     type: '',
     tag_id: '',
   });
-
   useEffect(() => {
     loadInitialData();
   }, []);
-
   const loadInitialData = async () => {
     try {
       const [categoriesRes, tagsRes] = await Promise.all([
@@ -36,19 +32,16 @@ export default function SearchPage() {
       console.error('Ошибка загрузки данных:', err);
     }
   };
-
   const handleSearch = async (e) => {
     if (e) e.preventDefault();
     setLoading(true);
     setError('');
-
     try {
       const params = {};
       if (filters.query) params.q = filters.query;
       if (filters.category_id) params.category = filters.category_id;
       if (filters.type) params.type = filters.type;
       if (filters.tag_id) params.tag_id = filters.tag_id;
-
       const response = await documentsApi.search(params);
       const data = response.data;
       setDocuments(Array.isArray(data) ? data : (data.documents || []));
@@ -59,11 +52,9 @@ export default function SearchPage() {
     }
     setLoading(false);
   };
-
   const handleFilterChange = (field, value) => {
     setFilters({ ...filters, [field]: value });
   };
-
   const handleReset = () => {
     setFilters({
       query: '',
@@ -72,11 +63,9 @@ export default function SearchPage() {
       tag_id: '',
     });
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('ru-RU');
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -85,14 +74,12 @@ export default function SearchPage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   const statusNames = {
     draft: 'Черновик',
     pending_approval: 'На согласовании',
     in_library: 'В библиотеке',
     pending_deletion: 'На удаление',
   };
-
   const getStatusClass = (status) => {
     switch (status) {
       case 'draft': return 'draft';
@@ -102,12 +89,10 @@ export default function SearchPage() {
       default: return 'draft';
     }
   };
-
   return (
     <Layout>
       <div className="search-page">
         <h1 className="search-title">Поиск документов</h1>
-
         {/* Search Form */}
         <form onSubmit={handleSearch} className="search-form">
           <div className="search-form-grid">
@@ -121,7 +106,6 @@ export default function SearchPage() {
                 className="search-input"
               />
             </div>
-
             <div className="search-field">
               <label className="search-field-label">Категория</label>
               <select
@@ -135,7 +119,6 @@ export default function SearchPage() {
                 ))}
               </select>
             </div>
-
             <div className="search-field">
               <label className="search-field-label">Тип документа</label>
               <select
@@ -152,7 +135,6 @@ export default function SearchPage() {
                 <option value="other">Другое</option>
               </select>
             </div>
-
             <div className="search-field">
               <label className="search-field-label">Тег</label>
               <select
@@ -167,7 +149,6 @@ export default function SearchPage() {
               </select>
             </div>
           </div>
-
           <div className="search-actions">
             <button type="submit" className="search-btn search-btn-primary">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -180,12 +161,10 @@ export default function SearchPage() {
             </button>
           </div>
         </form>
-
         {/* Error Modal */}
         {error && (
           <ErrorModal message={error} onClose={() => setError('')} />
         )}
-
         {/* Results */}
         {loading ? (
           <div className="search-loading">
@@ -202,7 +181,6 @@ export default function SearchPage() {
         ) : (
           <div className="search-results">
             <p className="search-results-count">Найдено документов: {documents.length}</p>
-            
             {documents.map((doc, index) => (
               <Link
                 key={doc.id}
@@ -216,9 +194,7 @@ export default function SearchPage() {
                     {statusNames[doc.status]}
                   </span>
                 </div>
-
                 <h3 className="search-doc-title">{doc.title}</h3>
-
                 <div className="search-doc-meta">
                   <span className="search-doc-meta-item">
                     {typeNames[doc.type] || doc.type}
@@ -232,7 +208,6 @@ export default function SearchPage() {
                   <span className="search-doc-meta-separator">|</span>
                   <span className="search-doc-meta-item">{formatDate(doc.created_at)}</span>
                 </div>
-
                 {doc.tags && doc.tags.length > 0 && (
                   <div className="search-doc-tags">
                     {doc.tags.map((tag, idx) => (

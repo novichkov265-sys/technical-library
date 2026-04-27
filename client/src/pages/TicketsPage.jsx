@@ -4,18 +4,15 @@ import { ticketsApi } from '../services/api';
 import { useAuth } from '../contexts/AuthContext';
 import Layout from '../components/Layout';
 import './TicketsPage.css';
-
 export default function TicketsPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const [tickets, setTickets] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
-
   useEffect(() => {
     loadTickets();
   }, []);
-
   const loadTickets = async () => {
     try {
       const response = await ticketsApi.getAll();
@@ -25,7 +22,6 @@ export default function TicketsPage() {
     }
     setLoading(false);
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('ru-RU', {
       day: '2-digit',
@@ -35,7 +31,6 @@ export default function TicketsPage() {
       minute: '2-digit',
     });
   };
-
   const statusNames = {
     pending: 'На рассмотрении',
     pending_library: 'Ожидает библиотекаря',
@@ -43,7 +38,6 @@ export default function TicketsPage() {
     rejected: 'Отклонён',
     changes_requested: 'Требует доработки',
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -52,7 +46,6 @@ export default function TicketsPage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   const filteredTickets = tickets.filter((ticket) => {
     if (filter === 'all') return true;
     if (filter === 'pending') return ticket.status === 'pending' || ticket.status === 'pending_library';
@@ -61,7 +54,6 @@ export default function TicketsPage() {
     if (filter === 'changes') return ticket.status === 'changes_requested';
     return true;
   });
-
   const counts = {
     all: tickets.length,
     pending: tickets.filter((t) => t.status === 'pending' || t.status === 'pending_library').length,
@@ -69,7 +61,6 @@ export default function TicketsPage() {
     rejected: tickets.filter((t) => t.status === 'rejected').length,
     changes: tickets.filter((t) => t.status === 'changes_requested').length,
   };
-
   const getStatusIcon = (status) => {
     switch (status) {
       case 'pending':
@@ -101,7 +92,6 @@ export default function TicketsPage() {
         return null;
     }
   };
-
   if (loading) {
     return (
       <Layout>
@@ -112,7 +102,6 @@ export default function TicketsPage() {
       </Layout>
     );
   }
-
   return (
     <Layout>
       <div className="tickets-page">
@@ -121,7 +110,6 @@ export default function TicketsPage() {
           <h1 className="tickets-title">Документы на согласование</h1>
           <p className="tickets-subtitle">Согласуйте или отклоните документы</p>
         </div>
-
         {/* Tabs */}
         <div className="tickets-tabs">
           <button
@@ -160,7 +148,6 @@ export default function TicketsPage() {
             <span className="tickets-tab-count">{counts.changes}</span>
           </button>
         </div>
-
         {/* Tickets List */}
         {filteredTickets.length === 0 ? (
           <div className="tickets-empty">
@@ -181,7 +168,6 @@ export default function TicketsPage() {
                 <div className={`ticket-icon ${ticket.status}`}>
                   {getStatusIcon(ticket.status)}
                 </div>
-                
                 <div className="ticket-content">
                   <div className="ticket-content-header">
                     <div>
@@ -189,7 +175,6 @@ export default function TicketsPage() {
                       <p className="ticket-code">{ticket.document_code}</p>
                     </div>
                   </div>
-                  
                   <div className="ticket-meta">
                     <div className="ticket-meta-item">
                       <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -211,7 +196,6 @@ export default function TicketsPage() {
                     </div>
                   </div>
                 </div>
-                
                 <div className="ticket-right">
                   <span className={`ticket-badge ${ticket.status}`}>
                     {statusNames[ticket.status]}

@@ -1,15 +1,11 @@
 import axios from 'axios';
-
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
-
-// Добавляем токен к каждому запросу
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -22,8 +18,6 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
-// Обработка ошибок авторизации
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -35,8 +29,6 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-
-// Auth API
 export const authApi = {
   login: (data) => api.post('/auth/login', data),
   register: (data) => api.post('/auth/register', data),
@@ -47,8 +39,6 @@ export const authApi = {
   }),
   deleteAvatar: () => api.delete('/auth/avatar'),
 };
-
-// Documents API
 export const documentsApi = {
   getAll: (params) => api.get('/documents', { params }),
   search: (params) => api.get('/documents/search', { params }),
@@ -60,7 +50,6 @@ export const documentsApi = {
     headers: { 'Content-Type': 'multipart/form-data' },
   }),
   download: (id) => api.get(`/documents/${id}/download`, { responseType: 'blob' }),
-  // Версии
   getVersions: (id) => api.get(`/documents/${id}/versions`),
   uploadVersion: (id, formData) => api.post(`/documents/${id}/versions`, formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
@@ -70,31 +59,24 @@ export const documentsApi = {
   }),
   downloadVersion: (id, versionId) => api.get(`/documents/${id}/versions/${versionId}/download`, { responseType: 'blob' }),
   getAuditLog: (id) => api.get(`/documents/${id}/audit`),
-  // Заметки
   getNotes: (id) => api.get(`/documents/${id}/notes`),
   addNote: (id, content) => api.post(`/documents/${id}/notes`, { content }),
   deleteNote: (id, noteId) => api.delete(`/documents/${id}/notes/${noteId}`),
-  // Комментарии
   getComments: (id) => api.get(`/documents/${id}/comments`),
   addComment: (id, content) => api.post(`/documents/${id}/comments`, { content }),
   deleteComment: (id, commentId) => api.delete(`/documents/${id}/comments/${commentId}`),
-  // Избранное
   addToFavorites: (id) => api.post(`/documents/favorites/${id}`),
   removeFromFavorites: (id) => api.delete(`/documents/favorites/${id}`),
   getFavorites: () => api.get('/documents/favorites'),
-  // Согласование
   getPendingApprovals: () => api.get('/documents/approvals/pending'),
   approve: (id, data) => api.post(`/documents/${id}/approve`, data),
   reject: (id, data) => api.post(`/documents/${id}/reject`, data),
   getApprovalHistory: (id) => api.get(`/documents/${id}/approval-history`),
-  // Архив
   getArchived: (params) => api.get('/documents/archived/list', { params }),
   archive: (id) => api.put(`/documents/${id}/archive`),
   restore: (id) => api.put(`/documents/${id}/restore`),
   permanentDelete: (id) => api.delete(`/documents/${id}/permanent`),
 };
-
-// Categories API
 export const categoriesApi = {
   getAll: () => api.get('/categories'),
   getTree: () => api.get('/categories/tree'),
@@ -102,14 +84,11 @@ export const categoriesApi = {
   create: (data) => api.post('/categories', data),
   update: (id, data) => api.put(`/categories/${id}`, data),
   delete: (id) => api.delete(`/categories/${id}`),
-  // Теги
   getAllTags: () => api.get('/categories/tags'),
   createTag: (data) => api.post('/categories/tags', data),
   updateTag: (id, data) => api.put(`/categories/tags/${id}`, data),
   deleteTag: (id) => api.delete(`/categories/tags/${id}`),
 };
-
-// Users API
 export const usersApi = {
   getAll: (params) => api.get('/users', { params }),
   getById: (id) => api.get(`/users/${id}`),
@@ -120,23 +99,17 @@ export const usersApi = {
   getAnalytics: () => api.get('/users/analytics'),
   getAuditLogs: () => api.get('/users/audit'),
 };
-
-// Notifications API
 export const notificationsApi = {
   getAll: () => api.get('/notifications'),
   markAsRead: (id) => api.put(`/notifications/${id}/read`),
   markAllAsRead: () => api.put('/notifications/read-all'),
   delete: (id) => api.delete(`/notifications/${id}`),
 };
-
-// Settings API
 export const settingsApi = {
   getAll: () => api.get('/settings'),
   getPublic: () => api.get('/settings/public'),
   update: (key, value) => api.put('/settings', { key, value }),
 };
-
-// Tickets API
 export const ticketsApi = {
   getAll: (params) => api.get('/tickets', { params }),
   getById: (id) => api.get(`/tickets/${id}`),
@@ -156,8 +129,6 @@ export const ticketsApi = {
     });
   },
 };
-
-// Backup API
 export const backupApi = {
   getAll: () => api.get('/backup'),
   getList: () => api.get('/backup'),
@@ -166,10 +137,7 @@ export const backupApi = {
   download: (filename) => api.get(`/backup/download/${filename}`, { responseType: 'blob' }),
   delete: (id) => api.delete(`/backup/${id}`),
 };
-
-// Функция для получения базового URL API (без /api для предпросмотра)
 export const getApiUrl = () => {
   return API_URL.replace(/\/api\/?$/, '');
 };
-
 export default api;

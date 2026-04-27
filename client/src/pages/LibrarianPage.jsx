@@ -3,18 +3,15 @@ import { categoriesApi, documentsApi } from '../services/api';
 import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import './LibrarianPage.css';
-
 export default function LibrarianPage() {
   const [activeTab, setActiveTab] = useState('categories');
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [editingItem, setEditingItem] = useState(null);
-
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',
@@ -22,7 +19,6 @@ export default function LibrarianPage() {
     confirmText: '',
     onConfirm: () => {},
   });
-
   useEffect(() => {
     if (activeTab === 'categories') {
       loadCategories();
@@ -30,7 +26,6 @@ export default function LibrarianPage() {
       loadTags();
     }
   }, [activeTab]);
-
   const loadCategories = async () => {
     setLoading(true);
     setError('');
@@ -42,7 +37,6 @@ export default function LibrarianPage() {
     }
     setLoading(false);
   };
-
   const loadTags = async () => {
     setLoading(true);
     setError('');
@@ -54,19 +48,16 @@ export default function LibrarianPage() {
     }
     setLoading(false);
   };
-
   const handleCreateCategory = () => {
     setEditingItem({ name: '', description: '' });
     setModalType('createCategory');
     setShowModal(true);
   };
-
   const handleEditCategory = (category) => {
     setEditingItem(category);
     setModalType('editCategory');
     setShowModal(true);
   };
-
   const handleDeleteCategory = async (id) => {
     try {
       await categoriesApi.delete(id);
@@ -75,7 +66,6 @@ export default function LibrarianPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
-
   const openDeleteCategoryModal = (id) => {
     setConfirmModal({
       isOpen: true,
@@ -85,19 +75,16 @@ export default function LibrarianPage() {
       onConfirm: () => handleDeleteCategory(id),
     });
   };
-
   const handleCreateTag = () => {
     setEditingItem({ name: '' });
     setModalType('createTag');
     setShowModal(true);
   };
-
   const handleEditTag = (tag) => {
     setEditingItem(tag);
     setModalType('editTag');
     setShowModal(true);
   };
-
   const handleDeleteTag = async (id) => {
     try {
       await categoriesApi.deleteTag(id);
@@ -106,7 +93,6 @@ export default function LibrarianPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
-
   const openDeleteTagModal = (id) => {
     setConfirmModal({
       isOpen: true,
@@ -116,11 +102,9 @@ export default function LibrarianPage() {
       onConfirm: () => handleDeleteTag(id),
     });
   };
-
   const closeConfirmModal = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
-
   const handleSave = async () => {
     try {
       if (modalType === 'createCategory') {
@@ -142,7 +126,6 @@ export default function LibrarianPage() {
       alert(err.response?.data?.error || 'Ошибка сохранения');
     }
   };
-
   const handleGenerateReport = async () => {
     try {
       const response = await documentsApi.generateReport();
@@ -157,11 +140,9 @@ export default function LibrarianPage() {
       alert('Ошибка формирования отчета');
     }
   };
-
   return (
     <Layout>
       <h1 className="librarian-page__title">Управление библиотекой</h1>
-
       {/* Табы */}
       <div className="librarian-tabs">
         <button
@@ -183,13 +164,10 @@ export default function LibrarianPage() {
           Отчеты
         </button>
       </div>
-
       {error && <div className="librarian-error">{error}</div>}
-
       {loading && activeTab !== 'reports' && (
         <div className="librarian-loading">Загрузка...</div>
       )}
-
       {/* Категории */}
       {!loading && activeTab === 'categories' && (
         <div className="librarian-card">
@@ -198,7 +176,6 @@ export default function LibrarianPage() {
               Добавить категорию
             </button>
           </div>
-
           <div className="librarian-table-wrapper">
             <table className="librarian-table">
               <thead>
@@ -238,7 +215,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-
       {/* Теги */}
       {!loading && activeTab === 'tags' && (
         <div className="librarian-card">
@@ -247,7 +223,6 @@ export default function LibrarianPage() {
               Добавить тег
             </button>
           </div>
-
           <div className="librarian-table-wrapper">
             <table className="librarian-table">
               <thead>
@@ -287,12 +262,10 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-
       {/* Отчеты */}
       {activeTab === 'reports' && (
         <div className="librarian-card">
           <h2 className="librarian-reports__title">Формирование отчетов</h2>
-          
           <div className="librarian-reports__list">
             <div className="librarian-reports__item">
               <h3 className="librarian-reports__item-title">Отчет по документам</h3>
@@ -306,7 +279,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-
       {/* Модальное окно */}
       {showModal && (
         <div className="librarian-modal-overlay">
@@ -317,7 +289,6 @@ export default function LibrarianPage() {
               {modalType === 'createTag' && 'Новый тег'}
               {modalType === 'editTag' && 'Редактирование тега'}
             </h2>
-
             {(modalType === 'createCategory' || modalType === 'editCategory') && editingItem && (
               <div className="librarian-modal__form">
                 <div className="librarian-modal__field">
@@ -340,7 +311,6 @@ export default function LibrarianPage() {
                 </div>
               </div>
             )}
-
             {(modalType === 'createTag' || modalType === 'editTag') && editingItem && (
               <div className="librarian-modal__form">
                 <div className="librarian-modal__field">
@@ -354,7 +324,6 @@ export default function LibrarianPage() {
                 </div>
               </div>
             )}
-
             <div className="librarian-modal__actions">
               <button onClick={handleSave} className="btn btn-primary">
                 Сохранить
@@ -372,7 +341,6 @@ export default function LibrarianPage() {
           </div>
         </div>
       )}
-
       <ConfirmModal
         isOpen={confirmModal.isOpen}
         onClose={closeConfirmModal}

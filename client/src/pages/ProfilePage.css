@@ -1,18 +1,13 @@
-/* ProfilePage.css */
-
 .profile-page {
   max-width: 48rem;
   margin: 0 auto;
 }
-
 .profile-page__title {
   font-size: 1.75rem;
   font-weight: 700;
   color: #1e293b;
   margin-bottom: 1.5rem;
 }
-
-/* Карточка профиля */
 .profile-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 1.25rem;
@@ -22,7 +17,6 @@
   overflow: hidden;
   box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
 }
-
 .profile-card::before {
   content: '';
   position: absolute;
@@ -33,7 +27,6 @@
   background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
   pointer-events: none;
 }
-
 .profile-card__content {
   display: flex;
   align-items: center;
@@ -41,13 +34,10 @@
   position: relative;
   z-index: 1;
 }
-
-/* Аватар */
 .profile-avatar {
   position: relative;
   flex-shrink: 0;
 }
-
 .profile-avatar__image {
   width: 6rem;
   height: 6rem;
@@ -58,12 +48,10 @@
   transition: all 0.3s ease;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
-
 .profile-avatar__image:hover {
   transform: scale(1.05);
   border-color: rgba(255, 255, 255, 0.5);
 }
-
 .profile-avatar__placeholder {
   width: 6rem;
   height: 6rem;
@@ -79,12 +67,10 @@
   border: 4px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
 }
-
 .profile-avatar__placeholder:hover {
   transform: scale(1.05);
   border-color: rgba(255, 255, 255, 0.5);
 }
-
 .profile-avatar__placeholder--blue { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
 .profile-avatar__placeholder--green { background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%); }
 .profile-avatar__placeholder--yellow { background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%); }
@@ -93,7 +79,6 @@
 .profile-avatar__placeholder--pink { background: linear-gradient(135deg, #ec4899 0%, #db2777 100%); }
 .profile-avatar__placeholder--indigo { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
 .profile-avatar__placeholder--teal { background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%); }
-
 .profile-avatar__delete {
   position: absolute;
   bottom: 0;
@@ -113,12 +98,10 @@
   transition: all 0.2s ease;
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
 }
-
 .profile-avatar__delete:hover {
   transform: scale(1.1);
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
 }
-
 .profile-avatar__spinner {
   width: 1.5rem;
   height: 1.5rem;
@@ -127,41 +110,33 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
-
 .profile-avatar__input {
   display: none;
 }
-
-/* Информация профиля */
 .profile-info {
   flex: 1;
   color: white;
 }
-
 .profile-info__name {
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-
 .profile-info__email {
   font-size: 0.95rem;
   opacity: 0.9;
   margin-bottom: 0.75rem;
 }
-
 .profile-info__badges {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   margin-bottom: 0.5rem;
 }
-
 .profile-info__role {
   display: inline-flex;
   align-items: center;
@@ -173,12 +148,10 @@
   font-size: 0.8rem;
   font-weight: 500;
 }
-
 .profile-info__role-icon {
   width: 0.875rem;
   height: 0.875rem;
 }
-
 .profile-info__position {
   display: inline-flex;
   align-items: center;
@@ -187,21 +160,17 @@
   border-radius: 9999px;
   font-size: 0.8rem;
 }
-
 .profile-info__hint {
   font-size: 0.75rem;
   opacity: 0.7;
   margin-top: 0.5rem;
 }
-
-/* Статистика профиля */
 .profile-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
-
 .profile-stats__item {
   background: white;
   border-radius: 1rem;
@@ -210,12 +179,10 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
 }
-
 .profile-stats__item:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
-
 .profile-stats__icon {
   width: 2.5rem;
   height: 2.5rem;
@@ -225,27 +192,22 @@
   align-items: center;
   justify-content: center;
 }
-
 .profile-stats__icon svg {
   width: 1.25rem;
   height: 1.25rem;
 }
-
 .profile-stats__icon--blue {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   color: #2563eb;
 }
-
 .profile-stats__icon--green {
   background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
   color: #16a34a;
 }
-
 .profile-stats__icon--purple {
   background: linear-gradient(135deg, #ede9fe 0%, #ddd6fe 100%);
   color: #7c3aed;
 }
-
 .profile-stats__value {
   font-size: 1.5rem;
   font-weight: 700;
@@ -253,20 +215,16 @@
   line-height: 1;
   margin-bottom: 0.25rem;
 }
-
 .profile-stats__label {
   font-size: 0.8rem;
   color: #64748b;
 }
-
-/* Форма редактирования */
 .profile-form {
   background: white;
   border-radius: 1rem;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
   overflow: hidden;
 }
-
 .profile-form__header {
   padding: 1.25rem 1.5rem;
   border-bottom: 1px solid #f1f5f9;
@@ -274,7 +232,6 @@
   align-items: center;
   gap: 0.75rem;
 }
-
 .profile-form__header-icon {
   width: 2.25rem;
   height: 2.25rem;
@@ -285,23 +242,18 @@
   align-items: center;
   justify-content: center;
 }
-
 .profile-form__header-icon svg {
   width: 1.125rem;
   height: 1.125rem;
 }
-
 .profile-form__title {
   font-size: 1.125rem;
   font-weight: 600;
   color: #1e293b;
 }
-
 .profile-form__body {
   padding: 1.5rem;
 }
-
-/* Уведомления */
 .profile-alert {
   display: flex;
   align-items: flex-start;
@@ -311,7 +263,6 @@
   margin-bottom: 1.25rem;
   animation: alert-slide 0.3s ease-out;
 }
-
 @keyframes alert-slide {
   from {
     opacity: 0;
@@ -322,58 +273,46 @@
     transform: translateY(0);
   }
 }
-
 .profile-alert--error {
   background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
   border: 1px solid #fecaca;
 }
-
 .profile-alert--success {
   background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
   border: 1px solid #bbf7d0;
 }
-
 .profile-alert__icon {
   flex-shrink: 0;
   width: 1.25rem;
   height: 1.25rem;
   margin-top: 0.125rem;
 }
-
 .profile-alert--error .profile-alert__icon {
   color: #dc2626;
 }
-
 .profile-alert--success .profile-alert__icon {
   color: #16a34a;
 }
-
 .profile-alert__text {
   font-size: 0.875rem;
   line-height: 1.5;
 }
-
 .profile-alert--error .profile-alert__text {
   color: #991b1b;
 }
-
 .profile-alert--success .profile-alert__text {
   color: #166534;
 }
-
-/* Поля формы */
 .profile-form__fields {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
 }
-
 .profile-form__group {
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
 }
-
 .profile-form__label {
   font-size: 0.875rem;
   font-weight: 500;
@@ -382,13 +321,11 @@
   align-items: center;
   gap: 0.375rem;
 }
-
 .profile-form__label-icon {
   width: 1rem;
   height: 1rem;
   color: #9ca3af;
 }
-
 .profile-form__input {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -399,32 +336,26 @@
   background: #f8fafc;
   transition: all 0.2s ease;
 }
-
 .profile-form__input:focus {
   outline: none;
   border-color: #2563eb;
   background: white;
   box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
-
 .profile-form__input::placeholder {
   color: #94a3b8;
 }
-
-/* Разделитель секции пароля */
 .profile-form__divider {
   display: flex;
   align-items: center;
   gap: 1rem;
   margin: 1.5rem 0;
 }
-
 .profile-form__divider-line {
   flex: 1;
   height: 1px;
   background: linear-gradient(90deg, transparent 0%, #e2e8f0 50%, transparent 100%);
 }
-
 .profile-form__divider-text {
   font-size: 0.75rem;
   font-weight: 500;
@@ -432,33 +363,27 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
-
-/* Секция пароля */
 .profile-form__section-header {
   display: flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 0.25rem;
 }
-
 .profile-form__section-icon {
   width: 1.125rem;
   height: 1.125rem;
   color: #64748b;
 }
-
 .profile-form__section-title {
   font-size: 1rem;
   font-weight: 600;
   color: #1e293b;
 }
-
 .profile-form__section-desc {
   font-size: 0.8rem;
   color: #64748b;
   margin-bottom: 1rem;
 }
-
 .profile-form__hint {
   font-size: 0.75rem;
   color: #64748b;
@@ -467,14 +392,11 @@
   align-items: center;
   gap: 0.25rem;
 }
-
 .profile-form__hint-icon {
   width: 0.875rem;
   height: 0.875rem;
   color: #94a3b8;
 }
-
-/* Кнопка сохранения */
 .profile-form__submit {
   display: flex;
   align-items: center;
@@ -493,26 +415,21 @@
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
   margin-top: 0.5rem;
 }
-
 .profile-form__submit:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
 }
-
 .profile-form__submit:active:not(:disabled) {
   transform: translateY(0);
 }
-
 .profile-form__submit:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
-
 .profile-form__submit-icon {
   width: 1.125rem;
   height: 1.125rem;
 }
-
 .profile-form__submit-spinner {
   width: 1.125rem;
   height: 1.125rem;
@@ -521,18 +438,14 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-
-/* Адаптивность */
 @media (max-width: 640px) {
   .profile-card__content {
     flex-direction: column;
     text-align: center;
   }
-  
   .profile-info__badges {
     justify-content: center;
   }
-  
   .profile-stats {
     grid-template-columns: 1fr;
   }

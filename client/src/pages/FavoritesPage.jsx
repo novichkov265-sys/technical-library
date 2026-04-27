@@ -4,7 +4,6 @@ import { documentsApi } from '../services/api';
 import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import './FavoritesPage.css';
-
 export default function FavoritesPage() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,11 +13,9 @@ export default function FavoritesPage() {
     docId: null,
     docTitle: '',
   });
-
   useEffect(() => {
     loadFavorites();
   }, []);
-
   const loadFavorites = async () => {
     try {
       const response = await documentsApi.getFavorites();
@@ -28,7 +25,6 @@ export default function FavoritesPage() {
     }
     setLoading(false);
   };
-
   const handleRemoveFromFavorites = async (docId) => {
     try {
       await documentsApi.removeFromFavorites(docId);
@@ -37,22 +33,18 @@ export default function FavoritesPage() {
       setError('Ошибка удаления из избранного');
     }
   };
-
   const openRemoveModal = (docId, docTitle) => {
     setConfirmModal({ isOpen: true, docId, docTitle });
   };
-
   const closeConfirmModal = () => {
     setConfirmModal({ isOpen: false, docId: null, docTitle: '' });
   };
-
   const confirmRemove = () => {
     if (confirmModal.docId) {
       handleRemoveFromFavorites(confirmModal.docId);
     }
     closeConfirmModal();
   };
-
   const typeNames = {
     drawing: 'Чертеж',
     standard: 'Стандарт',
@@ -61,7 +53,6 @@ export default function FavoritesPage() {
     manual: 'Руководство',
     other: 'Другое',
   };
-
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('ru-RU', {
       day: 'numeric',
@@ -69,7 +60,6 @@ export default function FavoritesPage() {
       year: 'numeric',
     });
   };
-
   if (loading) {
     return (
       <Layout>
@@ -79,7 +69,6 @@ export default function FavoritesPage() {
       </Layout>
     );
   }
-
   return (
     <Layout>
       <div className="favorites-page">
@@ -95,7 +84,6 @@ export default function FavoritesPage() {
             <p className="favorites-subtitle">Сохраненные документы</p>
           </div>
         </div>
-
         {/* Error */}
         {error && (
           <div className="favorites-alert">
@@ -112,7 +100,6 @@ export default function FavoritesPage() {
             </button>
           </div>
         )}
-
         {/* Empty State */}
         {favorites.length === 0 ? (
           <div className="favorites-empty">
@@ -135,7 +122,6 @@ export default function FavoritesPage() {
         ) : (
           <>
             <p className="favorites-count">Всего документов: {favorites.length}</p>
-            
             <div className="favorites-grid">
               {favorites.map((doc, index) => (
                 <div 
@@ -153,7 +139,6 @@ export default function FavoritesPage() {
                     </div>
                     <span className="favorite-card-version">v{doc.version || 1}</span>
                   </div>
-
                   {/* Card Body */}
                   <div className="favorite-card-body">
                     <div className="favorite-card-title-row">
@@ -170,13 +155,10 @@ export default function FavoritesPage() {
                         </svg>
                       </button>
                     </div>
-
                     <code className="favorite-card-code">{doc.code}</code>
-
                     {doc.description && (
                       <p className="favorite-card-desc">{doc.description}</p>
                     )}
-
                     {/* Footer */}
                     <div className="favorite-card-footer">
                       {doc.category_name ? (
@@ -189,13 +171,11 @@ export default function FavoritesPage() {
                       ) : (
                         <span></span>
                       )}
-                      
                       {doc.created_at && (
                         <span className="favorite-card-date">{formatDate(doc.created_at)}</span>
                       )}
                     </div>
                   </div>
-
                   {/* Hover Action */}
                   <div className="favorite-card-action">
                     <Link to={`/documents/${doc.id}`} className="favorite-card-action-btn">
@@ -211,7 +191,6 @@ export default function FavoritesPage() {
             </div>
           </>
         )}
-
         {/* Confirm Modal */}
         <ConfirmModal
           isOpen={confirmModal.isOpen}
