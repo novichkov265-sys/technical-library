@@ -38,8 +38,12 @@ app.get('/api/health', (req, res) => {
 
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/index.html'));
+app.use((req, res, next) => {
+  if (req.method === 'GET' && !req.path.startsWith('/api/')) {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+  } else {
+    next();
+  }
 });
 
 const PORT = process.env.PORT || 5000;
