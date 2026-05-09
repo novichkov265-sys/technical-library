@@ -1,5 +1,8 @@
 .categories-page {
   animation: fadeIn var(--transition-normal) forwards;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
 }
 .categories-title {
   font-size: 1.5rem;
@@ -9,7 +12,7 @@
 }
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(400px, 1fr));
   gap: var(--spacing-xl);
 }
 @media (max-width: 1024px) {
