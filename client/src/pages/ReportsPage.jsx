@@ -247,30 +247,23 @@ export default function ReportsPage() {
                 <h3>По типам документов</h3>
                 <div className="type-list">
                   {stats.byType.map((item, index) => (
-                    <div key={index} className="type-item">
-                      <div className="type-info">
-                        <span className="type-name">{typeNames[item.type] || item.type}</span>
-                        <span className="type-count">{item.count} док.</span>
-                      </div>
-                      <div className="type-stats">
-                        <span className="type-stat">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                          </svg>
-                          {item.views}
-                        </span>
-                        <span className="type-stat">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                            <polyline points="7 10 12 15 17 10"/>
-                            <line x1="12" y1="15" x2="12" y2="3"/>
-                          </svg>
-                          {item.downloads}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+  <div key={index} className="type-item">
+    <div className="type-info">
+      <span className="type-name">{typeNames[item.type] || item.type}</span>
+      <span className="type-count">{item.count} док.</span>
+    </div>
+    <div className="type-stats">
+      <span className="type-stat">
+        <EyeIcon size={14} />
+        {item.views || 0}
+      </span>
+      <span className="type-stat">
+        <DownloadIcon size={14} />
+        {item.downloads || 0}
+      </span>
+    </div>
+  </div>
+))}
                 </div>
               </div>
             </div>
