@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -139,5 +139,10 @@ export const backupApi = {
 };
 export const getApiUrl = () => {
   return API_URL.replace(/\/api\/?$/, '');
+};
+export const reportsApi = {
+  getStats: (params) => api.get('/reports/stats', { params }),
+  exportPdf: (params) => api.get('/reports/export/pdf', { params, responseType: 'blob' }),
+  exportExcel: (params) => api.get('/reports/export/excel', { params, responseType: 'blob' }),
 };
 export default api;

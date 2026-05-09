@@ -17,6 +17,7 @@ const ticketsRoutes = require('./routes/tickets');
 const settingsRoutes = require('./routes/settings');
 const backupRoutes = require('./routes/backup');
 const notificationsRouter = require('./routes/notifications');
+const reportsRoutes = require('./routes/reports');
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/documents', documentsRoutes);
@@ -25,6 +26,7 @@ app.use('/api/tickets', ticketsRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/notifications', notificationsRouter);
+app.use('/api/reports', reportsRoutes);
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });

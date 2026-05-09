@@ -12,6 +12,7 @@ import TicketDetailPage from './pages/TicketDetailPage';
 import CategoriesPage from './pages/CategoriesPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminPage from './pages/AdminPage';
+import ReportsPage from './pages/ReportsPage';
 function PrivateRoute({ children, roles }) {
   const { user, loading } = useAuth();
   if (loading) {
@@ -81,6 +82,11 @@ function AppRoutes() {
         </PrivateRoute>
       } />
       <Route path="*" element={<Navigate to="/" />} />
+      <Route path="/reports" element={
+        <PrivateRoute roles={['librarian', 'admin']}>
+          <ReportsPage />
+        </PrivateRoute>
+      } />
     </Routes>
   );
 }

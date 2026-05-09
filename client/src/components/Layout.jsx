@@ -59,6 +59,7 @@ export default function Layout({ children }) {
       items.push({ path: '/upload', label: 'Загрузить', icon: 'upload' });
       items.push({ path: '/tickets', label: 'Согласование', icon: 'clipboard' });
       items.push({ path: '/categories', label: 'Категории', icon: 'folder' });
+      items.push({ path: '/reports', label: 'Отчеты' });
     }
     if (user?.role === 'department_head') {
       items.push({ path: '/tickets', label: 'Согласование', icon: 'clipboard' });
