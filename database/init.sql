@@ -70,21 +70,25 @@ CREATE TABLE IF NOT EXISTS favorites (
     PRIMARY KEY (user_id, document_id)
 );
 CREATE TABLE IF NOT EXISTS approval_tickets (
-    id SERIAL PRIMARY KEY,
-    document_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
-    created_by INTEGER REFERENCES users(id),
-    status VARCHAR(50) DEFAULT 'pending',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    closed_at TIMESTAMP
+  id SERIAL PRIMARY KEY,
+  document_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
+  created_by INTEGER REFERENCES users(id),
+  assigned_to INTEGER REFERENCES users(id),
+  status VARCHAR(50) DEFAULT 'pending',
+  stage INTEGER DEFAULT 1,
+  total_stages INTEGER DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  closed_at TIMESTAMP
 );
 CREATE TABLE IF NOT EXISTS ticket_messages (
-    id SERIAL PRIMARY KEY,
-    ticket_id INTEGER REFERENCES approval_tickets(id) ON DELETE CASCADE,
-    user_id INTEGER REFERENCES users(id),
-    message TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+  id SERIAL PRIMARY KEY,
+  ticket_id INTEGER REFERENCES approval_tickets(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id),
+  message TEXT NOT NULL,
+  message_type VARCHAR(50) DEFAULT 'message',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
 CREATE TABLE IF NOT EXISTS notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
