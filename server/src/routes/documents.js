@@ -17,10 +17,11 @@ const getClientIp = (req) => {
 const logAudit = async (userId, action, entityType, entityId, ipAddress, details = null) => {
   try {
     const ip = ipAddress === '::1' ? '127.0.0.1' : (ipAddress || 'unknown');
+    const detailsJson = details ? (typeof details === 'string' ? JSON.stringify({ title: details }) : JSON.stringify(details)) : null;
     await pool.query(
       `INSERT INTO audit_log (user_id, action, entity_type, entity_id, ip_address, details, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, NOW())`,
-      [userId, action, entityType, entityId, ip, details]
+      [userId, action, entityType, entityId, ip, detailsJson]
     );
   } catch (err) {
     console.error('Ошибка записи в аудит:', err);
