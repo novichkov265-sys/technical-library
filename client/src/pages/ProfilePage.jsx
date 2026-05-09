@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 import ConfirmModal from '../components/ConfirmModal';
 import './ProfilePage.css';
 export default function ProfilePage() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const fileInputRef = useRef(null);
   const [formData, setFormData] = useState({
     full_name: '',
@@ -123,6 +123,7 @@ export default function ProfilePage() {
       formData.append('avatar', file);
       const response = await authApi.uploadAvatar(formData);
       setCurrentUser(response.data);
+      updateUser(response.data);
       setSuccess('Фото профиля обновлено');
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка загрузки фото');
@@ -136,6 +137,7 @@ export default function ProfilePage() {
     try {
       const response = await authApi.deleteAvatar();
       setCurrentUser(response.data);
+      updateUser(response.data);
       setSuccess('Фото профиля удалено');
     } catch (err) {
       setError(err.response?.data?.error || 'Ошибка удаления фото');

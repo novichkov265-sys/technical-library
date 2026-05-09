@@ -71,10 +71,11 @@ CREATE TABLE IF NOT EXISTS comments (
 );
 
 CREATE TABLE IF NOT EXISTS favorites (
+  id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   document_id INTEGER REFERENCES documents(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (user_id, document_id)
+  UNIQUE (user_id, document_id)
 );
 
 CREATE TABLE IF NOT EXISTS approval_tickets (
@@ -162,7 +163,7 @@ INSERT INTO system_settings (key, value) VALUES
   ('password_min_length', '6'),
   ('max_upload_size', '52428800'),
   ('ticket_retention_days', '30'),
-  ('archive_auto_delete_days', '365')
+  ('archive_retention_days', '365')
 ON CONFLICT (key) DO NOTHING;
 
 INSERT INTO categories (name, description) VALUES 
