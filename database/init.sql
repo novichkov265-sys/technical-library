@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS system_settings (
 INSERT INTO users (email, password_hash, full_name, role) 
 VALUES (
   'admin@library.local', 
-  '$2b$10$rQZ5VN3YXKEZ1hHLpXxLxOJHGXOGp5QtXj5VlJ1qoXJvXK3jD7Kti', 
+  '$2b$10$9iExKYVht5hdnaqrCJsOM.aXhAloM3QVsuesTVoj7qOpurAAqkYx2', 
   'Администратор системы', 
   'admin'
 ) ON CONFLICT (email) DO NOTHING;
