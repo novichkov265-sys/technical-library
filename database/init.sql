@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS ticket_messages (
   message TEXT NOT NULL,
   message_type VARCHAR(50) DEFAULT 'message',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-)
+);
 CREATE TABLE IF NOT EXISTS notifications (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
