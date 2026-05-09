@@ -3,10 +3,10 @@
 }
 
 .categories-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-xl);
-  width: 100%;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: var(--spacing-xl) !important;
+  width: 100% !important;
 }
 
 .categories-section {
