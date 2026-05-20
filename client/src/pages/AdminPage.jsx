@@ -146,6 +146,15 @@ export default function AdminPage() {
       setError(err.response?.data?.error || 'Ошибка удаления');
     }
   };
+  const handleUnlockUser = async (userId) => {
+    try {
+      await usersApi.unlock(userId);
+      setSuccess('Пользователь разблокирован');
+      loadData();
+    } catch (err) {
+      setError(err.response?.data?.error || 'Ошибка разблокировки');
+    }
+  };
   const openDeleteUserModal = (userId) => {
     setConfirmModal({
       isOpen: true,
@@ -247,6 +256,7 @@ export default function AdminPage() {
   const closeConfirmModal = () => {
     setConfirmModal({ ...confirmModal, isOpen: false });
   };
+
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleString('ru-RU');
   };
@@ -270,6 +280,7 @@ export default function AdminPage() {
     user_create: 'Создание пользователя',
     user_update: 'Изменение пользователя',
     user_delete: 'Удаление пользователя',
+    user_unlock: 'Разблокировка пользователя',
     document_create: 'Создание документа',
     document_update: 'Изменение документа',
     document_delete: 'Удаление документа',
@@ -358,35 +369,55 @@ export default function AdminPage() {
                   <th>Email</th>
                   <th>Роль</th>
                   <th>Должность</th>
+                  <th>Статус</th>
                   <th className="text-right">Действия</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="admin-table-empty">
+                    <td colSpan="6" className="admin-table-empty">
                       {userSearch ? 'Пользователи не найдены' : 'Нет пользователей'}
                     </td>
                   </tr>
                 ) : (
-                  filteredUsers.map((user) => (
-                    <tr key={user.id}>
-                      <td className="admin-table-name">{user.full_name}</td>
-                      <td>{user.email}</td>
-                      <td>{roleNames[user.role]}</td>
-                      <td>{user.position || '-'}</td>
-                      <td>
-                        <div className="admin-table-actions">
-                          <span onClick={() => handleEditUser(user)} className="admin-link admin-link-edit">
-                            Изменить
-                          </span>
-                          <span onClick={() => openDeleteUserModal(user.id)} className="admin-link admin-link-delete">
-                            Удалить
-                          </span>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
+                  filteredUsers.map((user) => {
+                    const isLocked = user.locked_until && new Date(user.locked_until) > new Date();
+                    return (
+                      <tr key={user.id}>
+                        <td className="admin-table-name">{user.full_name}</td>
+                        <td>{user.email}</td>
+                        <td>{roleNames[user.role]}</td>
+                        <td>{user.position || '-'}</td>
+                        <td>
+                          {isLocked ? (
+                            <span className="admin-status-locked">
+                              Заблокирован
+                            </span>
+                          ) : (
+                            <span className="admin-status-active">
+                              Активен
+                            </span>
+                          )}
+                        </td>
+                        <td>
+                          <div className="admin-table-actions">
+                            {isLocked && (
+                              <span onClick={() => handleUnlockUser(user.id)} className="admin-link admin-link-unlock">
+                                Разблокировать
+                              </span>
+                            )}
+                            <span onClick={() => handleEditUser(user)} className="admin-link admin-link-edit">
+                              Изменить
+                            </span>
+                            <span onClick={() => openDeleteUserModal(user.id)} className="admin-link admin-link-delete">
+                              Удалить
+                            </span>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>
@@ -923,7 +954,7 @@ export default function AdminPage() {
                               if (action === 'user_login') return 'login';
                               if (action === 'user_logout') return 'logout';
                               if (action?.includes('create')) return 'create';
-                              if (action?.includes('update')) return 'update';
+                              if (action?.includes('update') || action?.includes('unlock')) return 'update';
                               if (action?.includes('delete')) return 'delete';
                               if (action?.includes('download')) return 'download';
                               if (action?.includes('view')) return 'view';

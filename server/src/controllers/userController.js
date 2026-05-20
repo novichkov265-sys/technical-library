@@ -32,7 +32,10 @@ const userController = {
   async getAll(req, res) {
     try {
       const result = await pool.query(
-        'SELECT id, email, full_name, position, role, avatar_url, created_at FROM users ORDER BY created_at DESC'
+        `SELECT id, email, full_name, position, role, avatar_url, created_at, 
+                failed_login_attempts, locked_until 
+         FROM users 
+         ORDER BY created_at DESC`
       );
       res.json(result.rows);
     } catch (error) {
@@ -44,7 +47,9 @@ const userController = {
     try {
       const { id } = req.params;
       const result = await pool.query(
-        'SELECT id, email, full_name, position, role, avatar_url, created_at FROM users WHERE id = $1',
+        `SELECT id, email, full_name, position, role, avatar_url, created_at,
+                failed_login_attempts, locked_until
+         FROM users WHERE id = $1`,
         [id]
       );
       if (result.rows.length === 0) {
@@ -141,6 +146,32 @@ const userController = {
       res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
+  async unlock(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await pool.query(
+        `UPDATE users 
+         SET failed_login_attempts = 0, locked_until = NULL, updated_at = CURRENT_TIMESTAMP
+         WHERE id = $1
+         RETURNING id, email, full_name`,
+        [id]
+      );
+      if (result.rows.length === 0) {
+        return res.status(404).json({ error: 'Пользователь не найден' });
+      }
+      const ip = req.ip === '::1' ? '127.0.0.1' : (req.ip || req.headers['x-forwarded-for']?.split(',')[0] || 'unknown');
+      await pool.query(
+        `INSERT INTO audit_log (user_id, action, entity_type, entity_id, ip_address, details)
+         VALUES ($1, 'user_unlock', 'user', $2, $3, $4)`,
+        [req.user.id, id, ip, JSON.stringify({ unlocked_user: result.rows[0].email })]
+      );
+
+      res.json({ message: 'Пользователь разблокирован', user: result.rows[0] });
+    } catch (error) {
+      console.error('Ошибка разблокировки пользователя:', error);
+      res.status(500).json({ error: 'Ошибка сервера' });
+    }
+  },
   async getApprovers(req, res) {
     try {
       const result = await pool.query(
@@ -167,66 +198,66 @@ const userController = {
       res.status(500).json({ error: 'Ошибка сервера' });
     }
   },
-async getAnalytics(req, res) {
-  try {
-    const docsStats = await pool.query(`
-      SELECT 
-        COUNT(*) as total,
-        COALESCE(SUM(views), 0) as total_views,
-        COALESCE(SUM(downloads), 0) as total_downloads
-      FROM documents
-    `);
-    const usersCount = await pool.query('SELECT COUNT(*) FROM users');
-    const documentsByType = await pool.query(`
-      SELECT type, COUNT(*)::int as count
-      FROM documents
-      WHERE status = 'in_library'
-      GROUP BY type
-      ORDER BY count DESC
-    `);
-    const documentsByStatus = await pool.query(`
-      SELECT status, COUNT(*)::int as count
-      FROM documents
-      GROUP BY status
-      ORDER BY count DESC
-    `);
-    const usersByRole = await pool.query(`
-      SELECT role, COUNT(*)::int as count
-      FROM users
-      GROUP BY role
-      ORDER BY count DESC
-    `);
-    const documentsByCategory = await pool.query(`
-      SELECT COALESCE(c.name, 'Без категории') as category, COUNT(d.id)::int as count
-      FROM documents d
-      LEFT JOIN categories c ON d.category_id = c.id
-      WHERE d.status = 'in_library'
-      GROUP BY c.name
-      ORDER BY count DESC
-      LIMIT 10
-    `);
-    const popularDocuments = await pool.query(`
-      SELECT id, title, type, views, downloads
-      FROM documents
-      WHERE status = 'in_library'
-      ORDER BY views DESC, downloads DESC
-      LIMIT 10
-    `);
-    res.json({
-      totalDocuments: parseInt(docsStats.rows[0]?.total || 0),
-      totalUsers: parseInt(usersCount.rows[0]?.count || 0),
-      totalViews: parseInt(docsStats.rows[0]?.total_views || 0),
-      totalDownloads: parseInt(docsStats.rows[0]?.total_downloads || 0),
-      documentsByType: documentsByType.rows,
-      documentsByStatus: documentsByStatus.rows,
-      usersByRole: usersByRole.rows,
-      documentsByCategory: documentsByCategory.rows,
-      popularDocuments: popularDocuments.rows
-    });
-  } catch (error) {
-    console.error('Ошибка получения аналитики:', error);
-    res.status(500).json({ error: 'Не удалось загрузить аналитику: ' + error.message });
+  async getAnalytics(req, res) {
+    try {
+      const docsStats = await pool.query(`
+        SELECT 
+          COUNT(*) as total,
+          COALESCE(SUM(views), 0) as total_views,
+          COALESCE(SUM(downloads), 0) as total_downloads
+        FROM documents
+      `);
+      const usersCount = await pool.query('SELECT COUNT(*) FROM users');
+      const documentsByType = await pool.query(`
+        SELECT type, COUNT(*)::int as count
+        FROM documents
+        WHERE status = 'in_library'
+        GROUP BY type
+        ORDER BY count DESC
+      `);
+      const documentsByStatus = await pool.query(`
+        SELECT status, COUNT(*)::int as count
+        FROM documents
+        GROUP BY status
+        ORDER BY count DESC
+      `);
+      const usersByRole = await pool.query(`
+        SELECT role, COUNT(*)::int as count
+        FROM users
+        GROUP BY role
+        ORDER BY count DESC
+      `);
+      const documentsByCategory = await pool.query(`
+        SELECT COALESCE(c.name, 'Без категории') as category, COUNT(d.id)::int as count
+        FROM documents d
+        LEFT JOIN categories c ON d.category_id = c.id
+        WHERE d.status = 'in_library'
+        GROUP BY c.name
+        ORDER BY count DESC
+        LIMIT 10
+      `);
+      const popularDocuments = await pool.query(`
+        SELECT id, title, type, views, downloads
+        FROM documents
+        WHERE status = 'in_library'
+        ORDER BY views DESC, downloads DESC
+        LIMIT 10
+      `);
+      res.json({
+        totalDocuments: parseInt(docsStats.rows[0]?.total || 0),
+        totalUsers: parseInt(usersCount.rows[0]?.count || 0),
+        totalViews: parseInt(docsStats.rows[0]?.total_views || 0),
+        totalDownloads: parseInt(docsStats.rows[0]?.total_downloads || 0),
+        documentsByType: documentsByType.rows,
+        documentsByStatus: documentsByStatus.rows,
+        usersByRole: usersByRole.rows,
+        documentsByCategory: documentsByCategory.rows,
+        popularDocuments: popularDocuments.rows
+      });
+    } catch (error) {
+      console.error('Ошибка получения аналитики:', error);
+      res.status(500).json({ error: 'Не удалось загрузить аналитику: ' + error.message });
+    }
   }
-}
 };
 module.exports = userController;

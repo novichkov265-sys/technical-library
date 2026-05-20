@@ -26,4 +26,5 @@ router.get('/:id', roleMiddleware(['admin']), userController.getById);
 router.post('/', roleMiddleware(['admin']), userController.create);
 router.put('/:id', roleMiddleware(['admin']), userController.update);
 router.delete('/:id', roleMiddleware(['admin']), userController.delete);
+router.post('/:id/unlock', roleMiddleware(['admin']), userController.unlock);
 module.exports = router;

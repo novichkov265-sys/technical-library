@@ -905,3 +905,33 @@
   font-size: 0.9375rem;
   color: var(--color-gray-500);
 }
+.admin-status-locked {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: #fef2f2;
+  color: #dc2626;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-status-active {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  background-color: #f0fdf4;
+  color: #16a34a;
+  border-radius: 9999px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.admin-link-unlock {
+  color: #2563eb !important;
+}
+
+.admin-link-unlock:hover {
+  color: #1d4ed8 !important;
+  text-decoration: underline;
+}

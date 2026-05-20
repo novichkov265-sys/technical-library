@@ -22,6 +22,7 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     const isLoginRequest = error.config?.url?.includes('/auth/login');
+    
     if (error.response?.status === 401 && !isLoginRequest) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -96,6 +97,7 @@ export const usersApi = {
   create: (data) => api.post('/users', data),
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
+  unlock: (id) => api.post(`/users/${id}/unlock`),
   getApprovers: () => api.get('/users/approvers'),
   getAnalytics: () => api.get('/users/analytics'),
   getAuditLogs: () => api.get('/users/audit'),
