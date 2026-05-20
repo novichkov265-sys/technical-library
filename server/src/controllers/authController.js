@@ -3,6 +3,17 @@ const jwt = require('jsonwebtoken');
 const pool = require('../config/database');
 const path = require('path');
 const fs = require('fs');
+const getSetting = async (key, defaultValue) => {
+  try {
+    const result = await pool.query(
+      'SELECT value FROM system_settings WHERE key = $1',
+      [key]
+    );
+    return result.rows.length > 0 ? result.rows[0].value : defaultValue;
+  } catch (error) {
+    return defaultValue;
+  }
+};
 const authController = {
   async register(req, res) {
     try {
@@ -44,52 +55,91 @@ const authController = {
       res.status(500).json({ error: 'Ошибка сервера при регистрации' });
     }
   },
-async login(req, res) {
-  try {
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res.status(400).json({ error: 'Введите email и пароль' });
+  async login(req, res) {
+    try {
+      const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Введите email и пароль' });
+      }
+      const result = await pool.query(
+        'SELECT * FROM users WHERE email = $1',
+        [email.toLowerCase()]
+      );
+      if (result.rows.length === 0) {
+        return res.status(401).json({ error: 'Неверный email или пароль' });
+      }
+      const user = result.rows[0];
+      const maxAttempts = parseInt(await getSetting('max_login_attempts', '5'));
+      const lockoutDuration = parseInt(await getSetting('lockout_duration', '15'));
+      if (user.locked_until && new Date(user.locked_until) > new Date()) {
+        const remainingMinutes = Math.ceil((new Date(user.locked_until) - new Date()) / 60000);
+        return res.status(423).json({ 
+          error: `Аккаунт временно заблокирован. Попробуйте через ${remainingMinutes} мин.`,
+          locked: true,
+          remainingMinutes
+        });
+      }
+      const isValidPassword = await bcrypt.compare(password, user.password_hash);
+      if (!isValidPassword) {
+        const newAttempts = (user.failed_login_attempts || 0) + 1;
+        if (newAttempts >= maxAttempts) {
+          const lockedUntil = new Date(Date.now() + lockoutDuration * 60000);
+          await pool.query(
+            'UPDATE users SET failed_login_attempts = $1, locked_until = $2 WHERE id = $3',
+            [newAttempts, lockedUntil, user.id]
+          );
+          return res.status(423).json({ 
+            error: `Превышено количество попыток входа. Аккаунт заблокирован на ${lockoutDuration} минут.`,
+            locked: true,
+            remainingMinutes: lockoutDuration
+          });
+        } else {
+          await pool.query(
+            'UPDATE users SET failed_login_attempts = $1 WHERE id = $2',
+            [newAttempts, user.id]
+          );
+          const remainingAttempts = maxAttempts - newAttempts;
+          return res.status(401).json({ 
+            error: `Неверный email или пароль. Осталось попыток: ${remainingAttempts}`,
+            remainingAttempts
+          });
+        }
+      }
+      await pool.query(
+        'UPDATE users SET failed_login_attempts = 0, locked_until = NULL WHERE id = $1',
+        [user.id]
+      );
+      const jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
+      const sessionTimeout = parseInt(await getSetting('session_timeout', '60'));
+      const expiresIn = `${sessionTimeout}m`;
+      const token = jwt.sign(
+        { userId: user.id, id: user.id, email: user.email, role: user.role },
+        jwtSecret,
+        { expiresIn }
+      );
+      const ip = req.ip === '::1' ? '127.0.0.1' : (req.ip || req.headers['x-forwarded-for']?.split(',')[0] || 'unknown');
+      await pool.query(
+        `INSERT INTO audit_log (user_id, action, entity_type, entity_id, ip_address, created_at)
+         VALUES ($1, 'user_login', 'user', $1, $2, NOW())`,
+        [user.id, ip]
+      );
+      res.json({
+        token,
+        user: {
+          id: user.id,
+          email: user.email,
+          full_name: user.full_name,
+          position: user.position,
+          role: user.role,
+          avatar_url: user.avatar_url,
+        },
+        sessionTimeout: sessionTimeout
+      });
+    } catch (error) {
+      console.error('Ошибка входа:', error);
+      res.status(500).json({ error: 'Ошибка сервера при входе' });
     }
-    const result = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email.toLowerCase()]
-    );
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'Неверный email или пароль' });
-    }
-    const user = result.rows[0];
-    const isValidPassword = await bcrypt.compare(password, user.password_hash);
-    if (!isValidPassword) {
-      return res.status(401).json({ error: 'Неверный email или пароль' });
-    }
-    const jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
-    const token = jwt.sign(
-      { userId: user.id, id: user.id, email: user.email, role: user.role },
-      jwtSecret,
-      { expiresIn: '7d' }
-    );
-    const ip = req.ip === '::1' ? '127.0.0.1' : (req.ip || req.headers['x-forwarded-for']?.split(',')[0] || 'unknown');
-    await pool.query(
-      `INSERT INTO audit_log (user_id, action, entity_type, entity_id, ip_address, created_at)
-       VALUES ($1, 'user_login', 'user', $1, $2, NOW())`,
-      [user.id, ip]
-    );
-    res.json({
-      token,
-      user: {
-        id: user.id,
-        email: user.email,
-        full_name: user.full_name,
-        position: user.position,
-        role: user.role,
-        avatar_url: user.avatar_url,
-      },
-    });
-  } catch (error) {
-    console.error('Ошибка входа:', error);
-    res.status(500).json({ error: 'Ошибка сервера при входе' });
-  }
-},
+  },
   async getProfile(req, res) {
     try {
       const result = await pool.query(
@@ -192,4 +242,5 @@ async login(req, res) {
     }
   },
 };
+
 module.exports = authController;

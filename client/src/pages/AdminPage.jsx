@@ -508,6 +508,25 @@ export default function AdminPage() {
                 <p className="admin-setting-hint">После превышения аккаунт будет временно заблокирован</p>
               </div>
               <div className="admin-setting-item">
+                <label className="admin-setting-label">Время блокировки (минуты)</label>
+                <div className="admin-setting-row">
+                  <input
+                    type="number"
+                    key={`lockout_duration_${getSettingValue('lockout_duration', '15')}`}
+                    defaultValue={parseInt(getSettingValue('lockout_duration', '15'))}
+                    className="input"
+                    style={{ width: '120px' }}
+                    min="1"
+                    max="60"
+                    onBlur={(e) => {
+                      handleSettingChange('lockout_duration', e.target.value);
+                    }}
+                  />
+                  <span>минут</span>
+                </div>
+                <p className="admin-setting-hint">На сколько минут блокируется аккаунт после превышения попыток</p>
+              </div>
+              <div className="admin-setting-item">
                 <label className="admin-setting-label">Минимальная длина пароля</label>
                 <input
                   type="number"

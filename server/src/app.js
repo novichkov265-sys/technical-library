@@ -3,15 +3,12 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 const cleanupArchivedDocuments = require('./jobs/archiveCleanup');
-
 const app = express();
-
 app.set('trust proxy', true);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-
 const authRoutes = require('./routes/auth');
 const usersRoutes = require('./routes/users');
 const documentsRoutes = require('./routes/documents');
@@ -21,7 +18,6 @@ const settingsRoutes = require('./routes/settings');
 const backupRoutes = require('./routes/backup');
 const notificationsRouter = require('./routes/notifications');
 const reportsRoutes = require('./routes/reports');
-
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usersRoutes);
 app.use('/api/documents', documentsRoutes);
@@ -31,13 +27,10 @@ app.use('/api/settings', settingsRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/reports', reportsRoutes);
-
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok' });
 });
-
 app.use(express.static(path.join(__dirname, '../public')));
-
 app.use((req, res, next) => {
   if (req.method === 'GET' && !req.path.startsWith('/api/')) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
@@ -45,12 +38,9 @@ app.use((req, res, next) => {
     next();
   }
 });
-
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
   console.log(`Сервер запущен на порту ${PORT}`);
-
   async function cleanupOldTickets() {
     try {
       const pool = require('./config/database');
@@ -72,10 +62,8 @@ app.listen(PORT, () => {
       console.error('Ошибка очистки тикетов:', error);
     }
   }
-
   cleanupOldTickets();
   setInterval(cleanupOldTickets, 24 * 60 * 60 * 1000);
-
   cleanupArchivedDocuments();
   setInterval(() => {
     const now = new Date();

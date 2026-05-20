@@ -170,3 +170,21 @@ background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
     padding: var(--spacing-lg);
   }
 }
+.login-error-locked {
+  background-color: #fef2f2;
+  border-color: #dc2626;
+  color: #dc2626;
+}
+.login-lock-timer {
+  margin-top: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+.login-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.login-input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}

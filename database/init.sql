@@ -6,6 +6,8 @@ CREATE TABLE IF NOT EXISTS users (
   role VARCHAR(50) DEFAULT 'technical_specialist',
   position VARCHAR(255),
   avatar_url VARCHAR(500),
+  failed_login_attempts INTEGER DEFAULT 0,
+  locked_until TIMESTAMP,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -163,7 +165,10 @@ INSERT INTO system_settings (key, value) VALUES
   ('password_min_length', '6'),
   ('max_upload_size', '52428800'),
   ('ticket_retention_days', '30'),
-  ('archive_retention_days', '365')
+  ('archive_retention_days', '365'),
+  ('session_timeout', '60'),
+  ('max_login_attempts', '5'),
+  ('lockout_duration', '15')
 ON CONFLICT (key) DO NOTHING;
 
 INSERT INTO categories (name, description) VALUES 

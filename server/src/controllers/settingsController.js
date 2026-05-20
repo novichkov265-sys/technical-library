@@ -16,7 +16,7 @@ const settingsController = {
     try {
       const result = await pool.query(`
         SELECT key, value FROM system_settings 
-        WHERE key IN ('app_name', 'max_file_size', 'allowed_extensions', 'password_min_length')
+        WHERE key IN ('app_name', 'max_file_size', 'allowed_extensions', 'password_min_length', 'session_timeout', 'max_login_attempts', 'lockout_duration')
       `);
       const settings = {};
       result.rows.forEach(row => {
@@ -34,11 +34,22 @@ const settingsController = {
       if (!key) {
         return res.status(400).json({ error: 'Не указан ключ настройки' });
       }
-      await pool.query(`
-        UPDATE system_settings 
-        SET value = $1, updated_at = CURRENT_TIMESTAMP 
-        WHERE key = $2
-      `, [value, key]);
+      const existing = await pool.query(
+        'SELECT id FROM system_settings WHERE key = $1',
+        [key]
+      );
+      if (existing.rows.length === 0) {
+        await pool.query(`
+          INSERT INTO system_settings (key, value, updated_at) 
+          VALUES ($1, $2, CURRENT_TIMESTAMP)
+        `, [key, value]);
+      } else {
+        await pool.query(`
+          UPDATE system_settings 
+          SET value = $1, updated_at = CURRENT_TIMESTAMP 
+          WHERE key = $2
+        `, [value, key]);
+      }
       res.json({ message: 'Настройка обновлена' });
     } catch (error) {
       console.error('Ошибка обновления настройки:', error);
@@ -46,4 +57,5 @@ const settingsController = {
     }
   }
 };
+
 module.exports = settingsController;

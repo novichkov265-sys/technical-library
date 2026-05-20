@@ -3,16 +3,11 @@ const router = express.Router();
 const pool = require('../config/database');
 const authMiddleware = require('../middleware/auth');
 const roleMiddleware = require('../middleware/role');
-
-// Только для библиотекаря и админа
 router.use(authMiddleware);
 router.use(roleMiddleware(['librarian', 'admin']));
-
-// GET /api/reports/stats - Получение статистики для отчетов
 router.get('/stats', async (req, res) => {
   try {
     const { date_from, date_to } = req.query;
-    
     let dateCondition = '';
     const params = [];
     if (date_from) {
@@ -23,8 +18,6 @@ router.get('/stats', async (req, res) => {
       params.push(date_to);
       dateCondition += ` AND d.created_at <= $${params.length}::date + interval '1 day'`;
     }
-
-    // Общая статистика документов
     const totalDocs = await pool.query(`
       SELECT 
         COUNT(*) as total,
@@ -38,8 +31,6 @@ router.get('/stats', async (req, res) => {
       FROM documents d
       WHERE 1=1 ${dateCondition}
     `, params);
-
-    // Статистика по типам документов
     const byType = await pool.query(`
       SELECT 
         type,
@@ -51,8 +42,6 @@ router.get('/stats', async (req, res) => {
       GROUP BY type
       ORDER BY count DESC
     `, params);
-
-    // Статистика по категориям
     const byCategory = await pool.query(`
       SELECT 
         COALESCE(c.name, 'Без категории') as category,
@@ -65,8 +54,6 @@ router.get('/stats', async (req, res) => {
       GROUP BY c.name
       ORDER BY count DESC
     `, params);
-
-    // Топ-10 популярных документов
     const topDocuments = await pool.query(`
       SELECT 
         d.id,
@@ -82,8 +69,6 @@ router.get('/stats', async (req, res) => {
       ORDER BY d.views DESC NULLS LAST
       LIMIT 10
     `, params);
-
-    // Активность пользователей
     const userActivity = await pool.query(`
       SELECT 
         u.full_name,
@@ -99,8 +84,6 @@ router.get('/stats', async (req, res) => {
       ORDER BY views DESC
       LIMIT 10
     `, [date_from || null, date_to || null]);
-
-    // Статистика согласований
     const approvalStats = await pool.query(`
       SELECT 
         COUNT(*) as total,
@@ -111,7 +94,6 @@ router.get('/stats', async (req, res) => {
       WHERE created_at >= COALESCE($1::date, NOW() - interval '30 days')
         AND created_at <= COALESCE($2::date + interval '1 day', NOW())
     `, [date_from || null, date_to || null]);
-
     res.json({
       summary: totalDocs.rows[0],
       byType: byType.rows,
@@ -125,8 +107,6 @@ router.get('/stats', async (req, res) => {
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
-
-// GET /api/reports/export/excel - Экспорт отчета в Excel
 router.get('/export/excel', async (req, res) => {
   try {
     const { date_from, date_to } = req.query;
@@ -142,8 +122,6 @@ router.get('/export/excel', async (req, res) => {
       params.push(date_to);
       dateCondition += ` AND d.created_at <= $${params.length}::date + interval '1 day'`;
     }
-
-    // Получаем все документы
     const documents = await pool.query(`
       SELECT 
         d.code,
@@ -161,8 +139,6 @@ router.get('/export/excel', async (req, res) => {
       WHERE 1=1 ${dateCondition}
       ORDER BY d.created_at DESC
     `, params);
-
-    // Статистика
     const stats = await pool.query(`
       SELECT 
         COUNT(*) as total,
@@ -175,18 +151,14 @@ router.get('/export/excel', async (req, res) => {
       FROM documents d
       WHERE 1=1 ${dateCondition}
     `, params);
-
     const workbook = new ExcelJS.Workbook();
     workbook.creator = 'Техническая библиотека';
     workbook.created = new Date();
-
-    // Лист со сводкой
     const summarySheet = workbook.addWorksheet('Сводка');
     summarySheet.columns = [
       { header: 'Показатель', key: 'name', width: 30 },
       { header: 'Значение', key: 'value', width: 15 }
     ];
-    
     const summary = stats.rows[0];
     summarySheet.addRows([
       { name: 'Всего документов', value: parseInt(summary.total) },
@@ -197,7 +169,6 @@ router.get('/export/excel', async (req, res) => {
       { name: 'Всего просмотров', value: parseInt(summary.total_views) },
       { name: 'Всего скачиваний', value: parseInt(summary.total_downloads) }
     ]);
-
     summarySheet.getRow(1).font = { bold: true };
     summarySheet.getRow(1).fill = {
       type: 'pattern',
@@ -205,8 +176,6 @@ router.get('/export/excel', async (req, res) => {
       fgColor: { argb: 'FF2563EB' }
     };
     summarySheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-
-    // Лист с документами
     const docsSheet = workbook.addWorksheet('Документы');
     docsSheet.columns = [
       { header: 'Код', key: 'code', width: 15 },
@@ -219,7 +188,6 @@ router.get('/export/excel', async (req, res) => {
       { header: 'Создан', key: 'created_at', width: 20 },
       { header: 'Автор', key: 'created_by', width: 25 }
     ];
-
     const typeNames = {
       drawing: 'Чертеж',
       standard: 'Стандарт',
@@ -228,7 +196,6 @@ router.get('/export/excel', async (req, res) => {
       manual: 'Руководство',
       other: 'Другое'
     };
-
     const statusNames = {
       draft: 'Черновик',
       pending_approval: 'На согласовании',
@@ -236,7 +203,6 @@ router.get('/export/excel', async (req, res) => {
       in_library: 'В библиотеке',
       archived: 'В архиве'
     };
-
     documents.rows.forEach(doc => {
       docsSheet.addRow({
         code: doc.code,
@@ -250,7 +216,6 @@ router.get('/export/excel', async (req, res) => {
         created_by: doc.created_by
       });
     });
-
     docsSheet.getRow(1).font = { bold: true };
     docsSheet.getRow(1).fill = {
       type: 'pattern',
@@ -258,17 +223,13 @@ router.get('/export/excel', async (req, res) => {
       fgColor: { argb: 'FF2563EB' }
     };
     docsSheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
-
     res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     res.setHeader('Content-Disposition', `attachment; filename=report_${Date.now()}.xlsx`);
-
     await workbook.xlsx.write(res);
     res.end();
-
   } catch (error) {
     console.error('Ошибка генерации Excel:', error);
     res.status(500).json({ error: 'Ошибка генерации отчета' });
   }
 });
-
 module.exports = router;
