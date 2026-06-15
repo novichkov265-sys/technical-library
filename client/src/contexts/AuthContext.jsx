@@ -29,7 +29,7 @@ export function AuthProvider({ children }) {
       window.location.href = '/login?reason=timeout';
     } else {
       const remainingTime = timeoutMs - inactiveTime;
-      timeoutRef.current = setTimeout(checkInactivity, Math.min(remainingTime, 60000)); // проверяем каждую минуту
+      timeoutRef.current = setTimeout(checkInactivity, Math.min(remainingTime, 60000)); 
     }
   }, [user, sessionTimeout, logout]);
   const loadSessionSettings = useCallback(async () => {

@@ -49,13 +49,11 @@ export default function LoginPage() {
       const response = err.response;
       
       if (response?.status === 423) {
-        // Аккаунт заблокирован
         setIsLocked(true);
         const minutes = response.data?.remainingMinutes || 15;
         setLockTimer(minutes * 60);
         setError(response.data?.error || 'Аккаунт временно заблокирован');
       } else if (response?.data?.remainingAttempts !== undefined) {
-        // Неверный пароль с указанием оставшихся попыток
         setError(response.data.error);
       } else {
         setError(response?.data?.error || 'Ошибка входа');

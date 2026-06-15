@@ -485,7 +485,6 @@ export default function TicketDetailPage() {
           </div>
         </div>
         <div className="td-main">
-          {/* Preview */}
           <div className="card">
             <h3 className="td-section-title">Предпросмотр документа</h3>
             {renderPreview()}

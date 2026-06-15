@@ -86,7 +86,6 @@ setPendingDeletion([]);
         <div className="approvals-header">
           <h1 className="approvals-title">Согласование документов</h1>
         </div>
-        {/* Табы */}
         <div className="approvals-tabs">
           <button
             onClick={() => setActiveTab('approval')}
@@ -109,14 +108,12 @@ setPendingDeletion([]);
             <span className="approvals-tab-count">{pendingDeletion.length}</span>
           </button>
         </div>
-        {/* Loading */}
         {loading && (
           <div className="approvals-loading">
             <div className="approvals-spinner"></div>
             <p>Загрузка документов...</p>
           </div>
         )}
-        {/* Error */}
         {error && (
           <div className="approvals-error">
             <svg className="approvals-error-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">

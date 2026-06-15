@@ -85,7 +85,6 @@ export default function Layout({ children }) {
       <header className="layout-header">
         <div className="layout-header-container">
           <div className="layout-header-row">
-            {/* Logo */}
             <Link to={user?.role === 'admin' ? '/admin' : '/'} className="layout-logo">
               <div className="layout-logo-icon">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

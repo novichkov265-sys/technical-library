@@ -36,7 +36,7 @@ export default function RegisterPage() {
       password: formData.password,
       full_name: formData.full_name,
       position: formData.position,
-      role: 'technical_specialist', // По умолчанию - технический специалист
+      role: 'technical_specialist', 
     });
     if (result.success) {
       navigate('/login');
